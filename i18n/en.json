@@ -1,0 +1,55 @@
+{
+  "common": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "save": "Save",
+    "cancel": "Cancel",
+    "next": "Next",
+    "back": "Back",
+    "confirm": "Confirm",
+    "search": "Search",
+    "filter": "Filter",
+    "status": "Status",
+    "actions": "Actions",
+    "loading": "Loading...",
+    "success": "Success",
+    "error": "Error"
+  },
+  "landing": {
+    "hero_title": "NiSV Compliance Made Easy",
+    "hero_subtitle": "The complete digital solution for your cosmetic clinic. Legally secure, efficient, and luxurious.",
+    "cta_start": "Get Started",
+    "cta_demo": "Request Demo"
+  },
+  "auth": {
+    "welcome_back": "Welcome Back",
+    "create_account": "Create Account",
+    "email": "Email Address",
+    "password": "Password",
+    "forgot_password": "Forgot Password?",
+    "no_account": "Don't have an account?",
+    "have_account": "Already have an account?"
+  },
+  "dashboard": {
+    "overview": "Overview",
+    "catalog": "Equipment Catalog",
+    "my_equipment": "My Equipment",
+    "procedures": "Procedures",
+    "clients": "Clients",
+    "qr_codes": "QR Codes",
+    "settings": "Settings",
+    "subscription": "Subscription",
+    "compliance_status": "Compliance Status",
+    "total_clients": "Total Clients",
+    "active_qr": "Active QR Codes"
+  },
+  "client": {
+    "welcome": "Welcome to",
+    "start_process": "Start Documentation",
+    "health_form": "Health Questionnaire",
+    "consent_form": "Consent Form",
+    "signature": "Signature",
+    "complete": "Completed"
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "id": "dev-001",
+    "name": "Lumenis M22",
+    "category": "IPL-Gerät",
+    "manufacturer": "Lumenis",
+    "required_documents": ["Fachkundenachweis", "Gefährdungsbeurteilung", "Anlagenbuch"]
+  },
+  {
+    "id": "dev-002",
+    "name": "Alma Soprano Titanium",
+    "category": "Lasergerät zur Haarentfernung",
+    "manufacturer": "Alma Lasers",
+    "required_documents": ["Fachkundenachweis", "Laserschutzbeauftragter", "Wartungsprotokoll"]
+  },
+  {
+    "id": "dev-003",
+    "name": "HydraFacial Elite",
+    "category": "Gesichtsbehandlungsgerät",
+    "manufacturer": "HydraFacial",
+    "required_documents": ["Bedienungsanleitung", "Hygienekonzept"]
+  }
+]

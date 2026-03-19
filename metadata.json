@@ -1,0 +1,7 @@
+{
+  "name": "VERA NiSV-AUDIT",
+  "description": "Multi-tenant SaaS compliance platform for cosmetic clinics in Germany, digitizing NiSV regulation documentation.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}

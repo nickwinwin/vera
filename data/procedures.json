@@ -1,0 +1,22 @@
+[
+  {
+    "id": "anamnese",
+    "name": "Allgemeiner Anamnesebogen",
+    "description": "Erfassung Ihres Gesundheitszustands vor der ersten Behandlung."
+  },
+  {
+    "id": "ipl",
+    "name": "IPL Haarentfernung",
+    "description": "Dauerhafte Haarentfernung mittels Intense Pulsed Light Technologie."
+  },
+  {
+    "id": "laser",
+    "name": "Diodenlaser Haarentfernung",
+    "description": "Präzise Haarentfernung für alle Hauttypen."
+  },
+  {
+    "id": "peeling",
+    "name": "Chemisches Peeling",
+    "description": "Hauterneuerung durch kontrollierte Fruchtsäure-Anwendung."
+  }
+]

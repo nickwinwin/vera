@@ -1,0 +1,55 @@
+{
+  "common": {
+    "login": "Anmelden",
+    "register": "Registrieren",
+    "logout": "Abmelden",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "next": "Weiter",
+    "back": "Zurück",
+    "confirm": "Bestätigen",
+    "search": "Suchen",
+    "filter": "Filtern",
+    "status": "Status",
+    "actions": "Aktionen",
+    "loading": "Laden...",
+    "success": "Erfolg",
+    "error": "Fehler"
+  },
+  "landing": {
+    "hero_title": "NiSV-Compliance leicht gemacht",
+    "hero_subtitle": "Die digitale Komplettlösung für Ihr Kosmetikstudio. Rechtssicher, effizient und luxuriös.",
+    "cta_start": "Jetzt starten",
+    "cta_demo": "Demo anfordern"
+  },
+  "auth": {
+    "welcome_back": "Willkommen zurück",
+    "create_account": "Konto erstellen",
+    "email": "E-Mail-Adresse",
+    "password": "Passwort",
+    "forgot_password": "Passwort vergessen?",
+    "no_account": "Noch kein Konto?",
+    "have_account": "Bereits ein Konto?"
+  },
+  "dashboard": {
+    "overview": "Übersicht",
+    "catalog": "Gerätekatalog",
+    "my_equipment": "Meine Geräte",
+    "procedures": "Behandlungen",
+    "clients": "Kunden",
+    "qr_codes": "QR-Codes",
+    "settings": "Einstellungen",
+    "subscription": "Abonnement",
+    "compliance_status": "Compliance-Status",
+    "total_clients": "Kunden gesamt",
+    "active_qr": "Aktive QR-Codes"
+  },
+  "client": {
+    "welcome": "Willkommen bei",
+    "start_process": "Dokumentation starten",
+    "health_form": "Anamnesebogen",
+    "consent_form": "Einwilligungserklärung",
+    "signature": "Unterschrift",
+    "complete": "Abgeschlossen"
+  }
+}

@@ -1,0 +1,50 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand-beige: #C9A84C;
+  --color-brand-warm-white: #F8F6F2;
+  --color-brand-dark: #1A1A1A;
+  --color-brand-secondary: #555555;
+  --color-brand-muted: #999999;
+  --color-brand-border: #E8E2D9;
+  --color-brand-success: #4A9B6F;
+  --color-brand-error: #C0392B;
+
+  --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-display), serif;
+  --font-serif: var(--font-serif), serif;
+
+  --radius-brand: 8px;
+  
+  --shadow-brand: 0 2px 12px rgba(0, 0, 0, 0.06);
+}
+
+@layer base {
+  body {
+    @apply font-sans;
+  }
+  
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+}
+
+.medical-card {
+  @apply bg-brand-warm-white border border-brand-border rounded-brand shadow-brand;
+}
+
+.btn-primary {
+  @apply bg-brand-beige text-white px-6 py-2 rounded-brand hover:opacity-90 transition-all font-medium;
+}
+
+.btn-outline {
+  @apply border border-brand-beige text-brand-beige px-6 py-2 rounded-brand hover:bg-brand-beige hover:text-white transition-all font-medium;
+}
+
+.input-field {
+  @apply w-full py-2 border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige bg-white;
+}
+
+.input-field:not([class*="pl-"]) {
+  @apply px-4;
+}
