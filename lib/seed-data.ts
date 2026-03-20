@@ -217,9 +217,25 @@ export const DEMO_CLIENTS = [
 
 export const DEMO_PROCEDURES = [
   { name: "Anamnese", category: "anamnese", description: "Allgemeine Gesundheitsabfrage vor der Erstbehandlung", icon: "Clock" },
+  { name: "Klassische Gesichtsbehandlung", category: "classic", description: "Reinigung, Ausreinigung, Masken und Massage", icon: "Shield" },
   { name: "Chemisches Peeling", category: "peeling", description: "Hauterneuerung durch kontrollierte Säureanwendung", icon: "Shield" },
+  { name: "Microneedling", category: "microneedling", description: "Kollagenstimulation durch Mikroperforation", icon: "ArrowRight" },
+  { name: "Ultraschall", category: "ultraschall", description: "Hochfrequente Schallwellen zur Stimulation", icon: "ArrowRight" },
+  { name: "Radiofrequenz", category: "rf", description: "Gewebeverfeinerung durch Wärmeenergie", icon: "Clock" },
   { name: "IPL-Behandlung", category: "ipl", description: "Lichtbasierte Therapie für Pigmente und Gefäße", icon: "ArrowRight" },
   { name: "Laserbehandlung", category: "laser", description: "Hautverjüngung und Haarentfernung per Laser", icon: "Shield" },
-  { name: "Microneedling", category: "microneedling", description: "Kollagenstimulation durch Mikroperforation", icon: "ArrowRight" },
-  { name: "Radiofrequenz", category: "rf", description: "Gewebeverfeinerung durch Wärmeenergie", icon: "Clock" }
+  { name: "Elektroepilation", category: "elektroepilation", description: "Permanente Haarentfernung mittels Strom", icon: "ArrowRight" },
+  { name: "Mechanische Epilation", category: "mechanische_epilation", description: "Haarentfernung durch Wachs oder Sugaring", icon: "ArrowRight" },
+  { name: "Massagen", category: "massage", description: "Manuelle und apparative Massagetechniken", icon: "Clock" },
+  { name: "Kryolipolyse", category: "kryolipolyse", description: "Fettzellenreduktion durch gezielte Kälte", icon: "Shield" },
+  { name: "Kavitation", category: "kavitation", description: "Ultraschall-Fettabbau am Körper", icon: "ArrowRight" },
+  { name: "Pigmententfernung", category: "pigment_laser", description: "Entfernung von Pigmentflecken am Körper", icon: "Shield" },
+  { name: "Permanent Make-up", category: "pmu", description: "Dauerhafte Pigmentierung für Gesicht", icon: "Shield" },
+  { name: "Microneedling PMU", category: "microneedling_pmu", description: "Spezialisierte PMU-Hautbehandlung", icon: "ArrowRight" },
+  { name: "Maniküre & Pediküre", category: "nails", description: "Professionelle Hand- und Fußpflege", icon: "Clock" },
+  { name: "Podologie", category: "podologie", description: "Medizinische Fußpflege", icon: "Shield" },
+  { name: "Wimpern & Augenbrauen", category: "beauty_eyes", description: "Styling und Pflege der Augenpartie", icon: "ArrowRight" },
+  { name: "Make-up", category: "makeup", description: "Professionelles Make-up Styling", icon: "Shield" },
+  { name: "Schneiden / Färben", category: "hair_cut", description: "Friseurdienstleistungen", icon: "Clock" },
+  { name: "Extensions", category: "hair_extensions", description: "Haarverlängerung und -verdichtung", icon: "ArrowRight" }
 ];

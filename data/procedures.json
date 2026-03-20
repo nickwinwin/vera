@@ -5,18 +5,108 @@
     "description": "Erfassung Ihres Gesundheitszustands vor der ersten Behandlung."
   },
   {
-    "id": "ipl",
-    "name": "IPL Haarentfernung",
-    "description": "Dauerhafte Haarentfernung mittels Intense Pulsed Light Technologie."
-  },
-  {
-    "id": "laser",
-    "name": "Diodenlaser Haarentfernung",
-    "description": "Präzise Haarentfernung für alle Hauttypen."
+    "id": "classic",
+    "name": "Klassische Gesichtsbehandlung",
+    "description": "Reinigung, Ausreinigung, Masken und Massage."
   },
   {
     "id": "peeling",
     "name": "Chemisches Peeling",
     "description": "Hauterneuerung durch kontrollierte Fruchtsäure-Anwendung."
+  },
+  {
+    "id": "microneedling",
+    "name": "Microneedling",
+    "description": "Kollagenstimulation durch Mikroperforation."
+  },
+  {
+    "id": "ultraschall",
+    "name": "Ultraschall",
+    "description": "Hochfrequente Schallwellen zur Stimulation."
+  },
+  {
+    "id": "rf",
+    "name": "RF (Radiofrequenz)",
+    "description": "Gewebeverfeinerung durch Wärmeenergie."
+  },
+  {
+    "id": "ipl",
+    "name": "IPL (Pigment & Gefäße)",
+    "description": "Lichtbasierte Therapie für Pigmente und Gefäße."
+  },
+  {
+    "id": "laser",
+    "name": "Laser-Haarentfernung",
+    "description": "Dauerhafte Haarentfernung für alle Systeme."
+  },
+  {
+    "id": "elektroepilation",
+    "name": "Elektroepilation / Nadelepilation",
+    "description": "Permanente Haarentfernung mittels Strom."
+  },
+  {
+    "id": "mechanische_epilation",
+    "name": "Mechanische Epilation",
+    "description": "Haarentfernung durch Wachs oder Sugaring."
+  },
+  {
+    "id": "massage",
+    "name": "Massagen",
+    "description": "Manuelle und apparative Massagetechniken."
+  },
+  {
+    "id": "kryolipolyse",
+    "name": "Kryolipolyse",
+    "description": "Fettzellenreduktion durch gezielte Kälte."
+  },
+  {
+    "id": "kavitation",
+    "name": "Kavitation",
+    "description": "Ultraschall-Fettabbau am Körper."
+  },
+  {
+    "id": "pigment_laser",
+    "name": "Pigmententfernung (Laser)",
+    "description": "Entfernung von Pigmentflecken am Körper."
+  },
+  {
+    "id": "pmu",
+    "name": "Permanent Make-up",
+    "description": "Dauerhafte Pigmentierung für Gesicht."
+  },
+  {
+    "id": "microneedling_pmu",
+    "name": "Microneedling PMU",
+    "description": "Spezialisierte PMU-Hautbehandlung."
+  },
+  {
+    "id": "nails",
+    "name": "Maniküre & Pediküre",
+    "description": "Professionelle Hand- und Fußpflege."
+  },
+  {
+    "id": "podologie",
+    "name": "Podologie",
+    "description": "Medizinische Fußpflege."
+  },
+  {
+    "id": "beauty_eyes",
+    "name": "Wimpern & Augenbrauen",
+    "description": "Styling und Pflege der Augenpartie."
+  },
+  {
+    "id": "makeup",
+    "name": "Make-up",
+    "description": "Professionelles Make-up Styling."
+  },
+  {
+    "id": "hair_cut",
+    "name": "Schneiden / Färben",
+    "description": "Friseurdienstleistungen."
+  },
+  {
+    "id": "hair_extensions",
+    "name": "Extensions",
+    "description": "Haarverlängerung und -verdichtung."
   }
 ]

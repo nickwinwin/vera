@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useI18n } from '@/hooks/use-i18n';
-import { Building, MapPin, Phone, Mail, Globe, Camera, Save, Bell, Shield, Users, Loader2 } from 'lucide-react';
+import { Building, MapPin, Phone, Mail, Globe, Camera, Save, Bell, Shield, Users, Loader2, Laptop } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
 import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/hooks/use-auth';
+import proceduresData from '@/data/procedures.json';
 
 export default function SettingsPage() {
   const { t } = useI18n();
@@ -14,6 +15,7 @@ export default function SettingsPage() {
   const [activeTab, setActiveTab] = useState('profile');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [equipment, setEquipment] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     name: '',
     owner_id: '',
@@ -24,11 +26,59 @@ export default function SettingsPage() {
     logo_url: ''
   });
 
+  const categories = proceduresData.filter(p => p.id !== 'anamnese');
+
   useEffect(() => {
     if (user?.clinicId) {
       fetchClinicData();
+      fetchEquipment();
     }
   }, [user]);
+
+  const fetchEquipment = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('equipment')
+        .select('*')
+        .eq('clinic_id', user!.clinicId);
+
+      if (error) throw error;
+      setEquipment(data || []);
+    } catch (error) {
+      console.error('Error fetching equipment:', error);
+    }
+  };
+
+  const handleUpdateDevice = async (categoryId: string, name: string) => {
+    try {
+      const existing = equipment.find(e => e.category_id === categoryId || e.type === categoryId);
+      
+      if (existing) {
+        const { error } = await supabase
+          .from('equipment')
+          .update({ name })
+          .eq('id', existing.id);
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('equipment')
+          .insert({
+            clinic_id: user!.clinicId,
+            category_id: categoryId,
+            type: categoryId,
+            name: name,
+            status: 'active'
+          });
+        if (error) throw error;
+      }
+      
+      fetchEquipment();
+      toast.success('Gerät aktualisiert');
+    } catch (error) {
+      console.error('Error updating device:', error);
+      toast.error('Fehler beim Aktualisieren');
+    }
+  };
 
   const fetchClinicData = async () => {
     try {
@@ -89,6 +139,7 @@ export default function SettingsPage() {
 
   const tabs = [
     { id: 'profile', label: 'Profil', icon: Building },
+    { id: 'equipment', label: 'Geräte-Inventar', icon: Laptop },
     { id: 'notifications', label: 'Benachrichtigungen', icon: Bell },
     { id: 'security', label: 'Sicherheit', icon: Shield },
     { id: 'team', label: 'Team', icon: Users },
@@ -215,6 +266,47 @@ export default function SettingsPage() {
                     Änderungen speichern
                   </button>
                 </div>
+              </motion.div>
+            )}
+
+            {activeTab === 'equipment' && (
+              <motion.div 
+                key="equipment"
+                initial={{ opacity: 0, x: 20 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -20 }}
+                className="medical-card bg-white p-8 space-y-8"
+              >
+                <section className="space-y-6">
+                  <div className="flex justify-between items-center border-b border-brand-border pb-4">
+                    <h2 className="text-xl font-bold">Geräte-Inventar</h2>
+                    <p className="text-xs text-brand-muted uppercase font-bold">NiSV Kategorien</p>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    {categories.map((cat) => {
+                      const device = equipment.find(e => e.category_id === cat.id || e.type === cat.id);
+                      return (
+                        <div key={cat.id} className="flex flex-col sm:flex-row sm:items-center gap-4 p-4 bg-brand-warm-white/30 rounded-lg border border-brand-border/50">
+                          <div className="flex-1">
+                            <h4 className="font-bold text-sm">{cat.name}</h4>
+                            <p className="text-xs text-brand-muted">{cat.description}</p>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <input 
+                              type="text"
+                              placeholder="Gerätename / Modell"
+                              className="input-field text-sm py-1.5"
+                              defaultValue={device?.name || ''}
+                              onBlur={(e) => handleUpdateDevice(cat.id, e.target.value)}
+                            />
+                            <div className={`w-2 h-2 rounded-full ${device?.name ? 'bg-brand-success' : 'bg-brand-border'}`} />
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
               </motion.div>
             )}
 

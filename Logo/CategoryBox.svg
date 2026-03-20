@@ -1,0 +1,32 @@
+<svg width="400" height="240" viewBox="0 0 400 240" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Card -->
+  <rect width="400" height="240" rx="16" fill="white" />
+  <rect x="0.5" y="0.5" width="399" height="239" rx="15.5" stroke="#E5E7EB" />
+  
+  <!-- Icon Container -->
+  <rect x="24" y="24" width="48" height="48" rx="8" fill="#FDFBF7" />
+  <path d="M48 38V43C48 49 45 53 39 53C33 53 30 49 30 43V38C30 32 33 28 39 28C45 28 48 32 48 38Z" stroke="#C5A267" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M39 35V41" stroke="#C5A267" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M36 38H42" stroke="#C5A267" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Status Indicator (Success Example) -->
+  <circle cx="360" cy="48" r="10" fill="#F0FDF4" />
+  <path d="M356 48L358.667 50.6667L364 45.3333" stroke="#22C55E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Category Title -->
+  <text x="24" y="108" fill="#111827" font-family="sans-serif" font-size="20" font-weight="bold">Laser-Haarentfernung</text>
+  
+  <!-- Description -->
+  <text x="24" y="136" fill="#6B7280" font-family="sans-serif" font-size="14">Dauerhafte Haarentfernung für alle Systeme.</text>
+  <text x="24" y="156" fill="#6B7280" font-family="sans-serif" font-size="14">NiSV-konforme Dokumentation.</text>
+
+  <!-- Divider -->
+  <line x1="24" y1="184" x2="376" y2="184" stroke="#F3F4F6" stroke-width="1" />
+
+  <!-- Footer / Device Name -->
+  <text x="24" y="212" fill="#C5A267" font-family="sans-serif" font-size="12" font-weight="bold" letter-spacing="0.05em">ALMA SOPRANO TITANIUM</text>
+  
+  <!-- Document Icon -->
+  <path d="M360 200H352C350.895 200 350 200.895 350 202V218C350 219.105 350.895 220 352 220H364C365.105 220 366 219.105 366 218V206L360 200Z" stroke="#C5A267" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M360 200V206H366" stroke="#C5A267" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
