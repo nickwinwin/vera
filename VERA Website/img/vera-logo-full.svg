@@ -1,0 +1,10 @@
+<svg width="240" height="64" viewBox="0 0 240 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Shield Check Icon -->
+  <g transform="translate(0, 8)">
+    <path d="M24 44s16-8 16-20V10l-16-6-16 6v14c0 12 16 20 16 20z" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="m18 24 4 4 8-8" stroke="#C9A84C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+  
+  <!-- VERA Text -->
+  <text x="64" y="42" font-family="Georgia, serif" font-size="32" font-weight="400" letter-spacing="8" fill="#1E1A17">VERA</text>
+</svg>
