@@ -72,88 +72,95 @@ export default function MyEquipment() {
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-display font-bold">{t('dashboard.my_equipment')}</h1>
-          <p className="text-brand-secondary">Übersicht aller NiSV-relevanten Gerätekategorien und deren Compliance-Status.</p>
+          <p className="text-brand-secondary">Ihre aktiven Geräte und deren Compliance-Status.</p>
         </div>
-        <Link href="/dashboard/settings" className="btn-outline flex items-center gap-2">
-          <Settings className="w-5 h-5" /> Geräte verwalten
+        <Link href="/dashboard/catalog" className="btn-primary flex items-center gap-2">
+          <Plus className="w-5 h-5" /> Gerät hinzufügen
         </Link>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {categories.map((category, i) => {
-          const status = getCategoryStatus(category.id);
-          const device = equipment.find(e => e.category_id === category.id || e.type === category.id);
-          
-          return (
-            <motion.div 
-              key={category.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.05 }}
-              className="bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border/50 flex flex-col h-full"
-            >
-              {/* Top Section: Visual Shield & Category Badge */}
-              <div className="bg-brand-warm-white/50 p-8 flex flex-col items-center justify-center relative min-h-[180px]">
-                <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-brand-border/30">
-                  <span className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">
-                    {category.id.replace('_', ' ')}
-                  </span>
+      {equipment.length === 0 ? (
+        <div className="medical-card p-12 text-center bg-white">
+          <Shield className="w-16 h-16 text-brand-beige/20 mx-auto mb-4" />
+          <h3 className="text-xl font-bold mb-2">Noch keine Geräte hinzugefügt</h3>
+          <p className="text-brand-muted mb-8 max-w-md mx-auto">Fügen Sie Ihre ersten NiSV-relevanten Geräte aus unserem Katalog hinzu, um mit der Dokumentation zu beginnen.</p>
+          <Link href="/dashboard/catalog" className="btn-primary inline-flex items-center gap-2">
+            <Plus className="w-5 h-5" /> Zum Katalog
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {equipment.map((device, i) => {
+            const category = proceduresData.find(p => p.id === device.type);
+            const status = getCategoryStatus(device.type);
+            
+            return (
+              <motion.div 
+                key={device.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.05 }}
+                className="bg-white rounded-2xl overflow-hidden shadow-sm border border-brand-border/50 flex flex-col h-full"
+              >
+                {/* Top Section: Visual Shield & Category Badge */}
+                <div className="bg-brand-warm-white/50 p-8 flex flex-col items-center justify-center relative min-h-[180px]">
+                  <div className="absolute top-4 right-4 bg-white/80 backdrop-blur-sm px-3 py-1 rounded-full border border-brand-border/30">
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-brand-muted">
+                      {device.type?.replace('_', ' ') || 'GERÄT'}
+                    </span>
+                  </div>
                 </div>
                 
-                <div className="relative">
-                  <img 
-                    src="/icons/catalog-shield-check.svg" 
-                    alt="Shield Icon" 
-                    className={`w-28 h-28 transition-all duration-700 ${status === 'inactive' ? 'opacity-[0.05] grayscale' : 'opacity-[0.12]'}`}
-                  />
+                <div className="flex flex-col items-center justify-center">
+                  <Shield className={`w-20 h-20 transition-all duration-700 ${status === 'inactive' ? 'text-brand-muted/20' : 'text-brand-beige/40'}`} />
                 </div>
-              </div>
 
               {/* Bottom Section: Content */}
               <div className="p-6 flex flex-col flex-1">
                 <div className="mb-4">
-                  <p className="text-[10px] font-bold uppercase tracking-widest text-brand-beige mb-1">
-                    Kategorie
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-brand-muted mb-1">
+                    {category?.name || device.type || 'Unbekannte Kategorie'}
                   </p>
                   <h3 className="text-2xl font-display font-bold text-brand-dark leading-tight">
-                    {category.name}
+                    {device.name}
                   </h3>
                 </div>
 
-                <div className="space-y-3 mb-6 flex-1">
-                  <p className="text-xs font-bold text-brand-muted uppercase tracking-wider">Erforderliche Dokumente:</p>
-                  <div className="flex flex-wrap gap-2">
-                    {['Bedienungsanleitung', 'Fachkunde'].map((doc) => (
-                      <span key={doc} className="px-3 py-1 bg-brand-warm-white text-brand-secondary text-[10px] font-medium rounded-md border border-brand-border/30">
-                        {doc}
-                      </span>
-                    ))}
+                  <div className="space-y-3 mb-6 flex-1">
+                    <p className="text-xs font-bold text-brand-muted uppercase tracking-wider">Erforderliche Dokumente:</p>
+                    <div className="flex flex-wrap gap-2">
+                      {['Bedienungsanleitung', 'Fachkunde'].map((doc) => (
+                        <span key={doc} className="px-3 py-1 bg-brand-warm-white text-brand-secondary text-[10px] font-medium rounded-md border border-brand-border/30">
+                          {doc}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 pt-4 border-t border-brand-warm-white">
+                    <Link 
+                      href={device ? `/dashboard/equipment/${device.id}` : '/dashboard/settings'}
+                      className="btn-outline py-2.5 text-xs font-bold text-center"
+                    >
+                      Details
+                    </Link>
+                    <Link 
+                      href={device ? `/dashboard/equipment/${device.id}` : '/dashboard/settings'}
+                      className={`py-2.5 text-xs font-bold text-center rounded-brand transition-all ${
+                        device 
+                          ? 'bg-brand-beige/10 text-brand-beige border border-brand-beige/20' 
+                          : 'bg-brand-beige text-white hover:bg-brand-dark'
+                      }`}
+                    >
+                      {device ? 'Verwalten' : '+ Hinzufügen'}
+                    </Link>
                   </div>
                 </div>
-
-                <div className="grid grid-cols-2 gap-3 pt-4 border-t border-brand-warm-white">
-                  <Link 
-                    href={device ? `/dashboard/equipment/${device.id}` : '/dashboard/settings'}
-                    className="btn-outline py-2.5 text-xs font-bold text-center"
-                  >
-                    Details
-                  </Link>
-                  <Link 
-                    href={device ? `/dashboard/equipment/${device.id}` : '/dashboard/settings'}
-                    className={`py-2.5 text-xs font-bold text-center rounded-brand transition-all ${
-                      device 
-                        ? 'bg-brand-beige/10 text-brand-beige border border-brand-beige/20' 
-                        : 'bg-brand-beige text-white hover:bg-brand-dark'
-                    }`}
-                  >
-                    {device ? 'Verwalten' : '+ Hinzufügen'}
-                  </Link>
-                </div>
-              </div>
-            </motion.div>
-          );
-        })}
-      </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
