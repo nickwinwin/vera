@@ -1,0 +1,13 @@
+{
+  "cleanUrls": true,
+  "rewrites": [
+    {
+      "source": "/willkommen",
+      "destination": "/willkommen.html"
+    },
+    {
+      "source": "/audit",
+      "destination": "/index.html"
+    }
+  ]
+}
