@@ -8,7 +8,13 @@ import { Shield, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
  * It represents a NiSV regulatory category and its compliance status.
  */
 
-export const CategoryBox = ({ category, status, device }) => {
+interface CategoryBoxProps {
+  category: string;
+  status: 'success' | 'warning' | 'error' | 'inactive';
+  device: string;
+}
+
+export const CategoryBox = ({ category, status, device }: CategoryBoxProps) => {
   return (
     <div className={`medical-card p-6 flex flex-col justify-between gap-4 transition-all duration-300 ${
       status === 'inactive' ? 'bg-white/50 border-dashed opacity-75' : 'bg-white shadow-sm'
