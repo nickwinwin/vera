@@ -43,7 +43,7 @@ export default function ClientProceduresPage() {
       const { data: procData, error: procError } = await supabase
         .from('procedures')
         .select('*')
-        .eq('clinic_id', clinicData.id)
+        .eq('clinic_id', clinicData?.id)
         .order('name');
       
       if (procError) {

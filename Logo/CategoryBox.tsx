@@ -9,9 +9,14 @@ import { Shield, CheckCircle2, AlertCircle, FileText } from 'lucide-react';
  */
 
 interface CategoryBoxProps {
-  category: string;
+  category: {
+    name: string;
+    description: string;
+  };
   status: 'success' | 'warning' | 'error' | 'inactive';
-  device: string;
+  device?: {
+    name: string;
+  };
 }
 
 export const CategoryBox = ({ category, status, device }: CategoryBoxProps) => {
