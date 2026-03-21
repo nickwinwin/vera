@@ -7,15 +7,15 @@
     },
     {
       "source": "/home",
-      "destination": "/index.html"
+      "destination": "/landing.html"
     },
     {
       "source": "/audit",
-      "destination": "/index.html"
+      "destination": "/landing.html"
     },
     {
       "source": "/index",
-      "destination": "/index.html"
+      "destination": "/landing.html"
     }
   ]
 }
