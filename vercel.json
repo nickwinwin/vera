@@ -12,6 +12,10 @@
     {
       "source": "/audit",
       "destination": "/index.html"
+    },
+    {
+      "source": "/index",
+      "destination": "/index.html"
     }
   ]
 }
