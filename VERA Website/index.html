@@ -1061,7 +1061,40 @@
     color: var(--warm-gray);
   }
 
-  /* ===== FOOTER ===== */
+<!-- ===== DEMO FORM ===== -->
+<section class="demo-section section-pad" id="demo" style="background: var(--cream); padding: 100px 0;">
+  <div class="container">
+    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+      <p class="eyebrow">Kontakt</p>
+      <h2 class="section-title serif">Demo anfragen</h2>
+      <p style="margin-bottom: 48px;">Erleben Sie VERA live. Hinterlassen Sie uns Ihre Daten, und wir melden uns für eine persönliche Vorstellung.</p>
+      
+      <form action="mailto:demo@vera-docs.de" method="POST" enctype="text/plain" style="display: grid; gap: 20px; text-align: left;">
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Name des Instituts</label>
+          <input type="text" name="institute" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Ansprechpartner</label>
+          <input type="text" name="name" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">E-Mail Adresse</label>
+          <input type="email" name="email" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Nachricht (Optional)</label>
+          <textarea name="message" rows="4" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; resize: vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-gold" style="justify-content: center; cursor: pointer; border: none; width: 100%;">Anfrage senden</button>
+      </form>
+      
+      <p style="margin-top: 32px; font-size: 12px; color: var(--warm-gray);">Oder besuchen Sie direkt unsere <a href="willkommen.html" style="color: var(--soft-gold); text-decoration: none; font-weight: 600;">Willkommens-Seite</a>.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
   footer {
     padding: 48px;
     background: var(--off-black);
@@ -1264,7 +1297,7 @@
     <li><a href="#loesung">Lösung</a></li>
     <li><a href="#ablauf">Ablauf</a></li>
     <li><a href="#vorteile">Vorteile</a></li>
-    <li><a href="#demo" class="nav-cta">Demo anfragen</a></li>
+    <li><a href="willkommen.html" class="nav-cta">Demo anfragen</a></li>
   </ul>
   <button class="nav-mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('mobile-open')" aria-label="Menü">
     <span></span><span></span><span></span>
@@ -1276,9 +1309,9 @@
   <div class="hero-text">
     <p class="hero-eyebrow"><span></span> NiSV-Compliance Plattform</p>
     <h1 class="serif">Rechtssicherheit darf sich wie <em>Fürsorge</em> anfühlen.</h1>
-    <p class="hero-sub">VERA verwandelt NiSV-Dokumentation von einer bürokratischen Last in ein nahtloses, digitales Erlebnis - entwickelt für Studios, in denen jedes Detail zählt.</p>
+    <p class="hero-sub">VERA verwandelt NiSV-Dokumentation von einer bürokratischen Last in ein nahtloses, digitales Erlebnis - entwickelt für Institute, in denen jedes Detail zählt.</p>
     <div class="hero-actions">
-      <a href="#demo" class="btn-primary">Demo anfragen -&gt;</a>
+      <a href="willkommen.html" class="btn-primary">Demo anfragen -&gt;</a>
       <a href="#ablauf" class="btn-ghost">So funktioniert es</a>
     </div>
   </div>
@@ -1307,7 +1340,7 @@
   </div>
   <div class="problem-text reveal reveal-delay-1">
     <p class="eyebrow">Das Problem</p>
-    <h2 class="section-title serif">Ihr Studio steht für Qualität. Ihre Verwaltung leider nicht.</h2>
+    <h2 class="section-title serif">Ihr Institut steht für Qualität. Ihre Verwaltung leider nicht.</h2>
     <div class="pain-points">
           <div class="pain-point">
             <div class="pain-icon">
@@ -1354,7 +1387,7 @@
   <div class="solution-text reveal">
     <p class="eyebrow">Die Lösung</p>
     <h2 class="section-title serif">Ein System.<br>Alle Dokumente.<br>Immer bereit.</h2>
-    <p>VERA ersetzt Ordner, Zettel und Unsicherheit durch eine einzige, sichere Plattform — entwickelt für die Anforderungen moderner Kosmetikstudios. Digitale Anamnese, Einwilligungsmanagement, Gerätedokumentation und Behandlungsprotokolle — verschlüsselt, DSGVO-konform und jederzeit prüfungsbereit.</p>
+    <p>VERA ersetzt Ordner, Zettel und Unsicherheit durch eine einzige, sichere Plattform — entwickelt für die Anforderungen moderner Kosmetikinstitute. Digitale Anamnese, Einwilligungsmanagement, Gerätedokumentation und Behandlungsprotokolle — verschlüsselt, DSGVO-konform und jederzeit prüfungsbereit.</p>
     <div class="solution-tags">
       <span class="solution-tag">Papierlos</span>
       <span class="solution-tag">Prüfungsbereit</span>
@@ -1372,7 +1405,7 @@
 <section class="quote-section">
   <div class="container reveal">
     <blockquote class="serif">
-      „Ein Kosmetikstudio, das für seine Kunden <em>Perfektion</em> anstrebt, verdient ein System, das für seine <em>Compliance</em> dasselbe verlangt."
+      „Ein Kosmetikinstitut, das für seine Kunden <em>Perfektion</em> anstrebt, verdient ein System, das für seine <em>Compliance</em> dasselbe verlangt."
     </blockquote>
     <p class="quote-attr">Die VERA Philosophie</p>
   </div>
@@ -1430,7 +1463,7 @@
     <div class="journey-header reveal">
       <p class="eyebrow">Das Kundenerlebnis</p>
       <h2 class="section-title serif">Modern. Digital. Professionell.</h2>
-      <p>Ihr Kunde erlebt einen unkomplizierten Ablauf — und Ihr Studio erhält rechtssichere Daten ganz ohne Mehraufwand.</p>
+      <p>Ihr Kunde erlebt einen unkomplizierten Ablauf — und Ihr Institut erhält rechtssichere Daten ganz ohne Mehraufwand.</p>
     </div>
 
     <div class="journey-flow reveal">
@@ -1517,7 +1550,7 @@
         </div>
         <div>
           <h4 class="serif">Intelligente Kommunikation</h4>
-          <p>KI-gestützte Antworten auf E-Mail, WhatsApp und Instagram - im Tonfall Ihres Studios, rund um die Uhr.</p>
+          <p>KI-gestützte Antworten auf E-Mail, WhatsApp und Instagram - im Tonfall Ihres Instituts, rund um die Uhr.</p>
         </div>
       </div>
     </div>
@@ -1531,14 +1564,14 @@
       <div class="market-text reveal">
         <p class="eyebrow">Warum jetzt</p>
         <h2 class="section-title serif">Neue Pflichten. Offener Markt. Noch keine Lösung - bis jetzt.</h2>
-        <p>Die NiSV-Verordnung verpflichtet jedes Studio mit Laser-, IPL- und Ultraschallgeräten zu lückenloser Dokumentation. Compliance ist Pflicht - und bei Verstößen drohen hohe Strafen.</p>
-        <p>Trotzdem arbeiten die meisten Studios noch mit Papier und Ordnern. Eine digitale Lösung, die gezielt für NiSV-Compliance in Kosmetikstudios entwickelt wurde, gab es bisher nicht.</p>
+        <p>Die NiSV-Verordnung verpflichtet jedes Institut mit Laser-, IPL- und Ultraschallgeräten zu lückenloser Dokumentation. Compliance ist Pflicht - und bei Verstößen drohen hohe Strafen.</p>
+        <p>Trotzdem arbeiten die meisten Institute noch mit Papier und Ordnern. Eine digitale Lösung, die gezielt für NiSV-Compliance in Kosmetikinstituten entwickelt wurde, gab es bisher nicht.</p>
       </div>
       <div class="reveal reveal-delay-1">
         <div class="stats-grid">
           <div class="stat-card">
             <div class="stat-num serif">20K+</div>
-            <div class="stat-label">Kosmetikstudios<br>in Deutschland</div>
+            <div class="stat-label">Kosmetikinstitute<br>in Deutschland</div>
           </div>
           <div class="stat-card">
             <div class="stat-num serif">100%</div>
@@ -1555,10 +1588,41 @@
 </section>
 
 <!-- ===== CTA ===== -->
-<section class="cta" id="demo">
-  <h2 class="section-title serif reveal">Der neue Standard<br>für <em>Kosmetikstudios.</em></h2>
+<section class="cta">
+  <h2 class="section-title serif reveal">Der neue Standard<br>für <em>Kosmetikinstitute.</em></h2>
   <p class="reveal">Rechtssicher. Digital. Einfach gemacht.</p>
-  <a href="#" class="btn-gold reveal">Demo anfragen -&gt;</a>
+  <a href="willkommen.html" class="btn-gold reveal">Demo anfragen -&gt;</a>
+</section>
+
+<!-- ===== DEMO FORM ===== -->
+<section class="demo-section section-pad" id="demo" style="background: var(--cream); padding: 100px 0;">
+  <div class="container">
+    <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+      <p class="eyebrow">Kontakt</p>
+      <h2 class="section-title serif">Demo anfragen</h2>
+      <p style="margin-bottom: 48px;">Erleben Sie VERA live. Hinterlassen Sie uns Ihre Daten, und wir melden uns für eine persönliche Vorstellung.</p>
+      
+      <form action="mailto:demo@vera-docs.de" method="POST" enctype="text/plain" style="display: grid; gap: 20px; text-align: left;">
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Name des Instituts</label>
+          <input type="text" name="institute" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Ansprechpartner</label>
+          <input type="text" name="name" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">E-Mail Adresse</label>
+          <input type="email" name="email" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+        </div>
+        <div>
+          <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Nachricht (Optional)</label>
+          <textarea name="message" rows="4" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; resize: vertical;"></textarea>
+        </div>
+        <button type="submit" class="btn-gold" style="justify-content: center; cursor: pointer; border: none; width: 100%;">Anfrage senden</button>
+      </form>
+    </div>
+  </div>
 </section>
 
 <!-- ===== FOOTER ===== -->
