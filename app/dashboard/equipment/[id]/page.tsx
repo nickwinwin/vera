@@ -29,7 +29,14 @@ export default function EquipmentDetail() {
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editData, setEditData] = useState({ name: '', serial_number: '' });
+  const [editData, setEditData] = useState({ 
+    name: '', 
+    serial_number: '',
+    manufacturer: '',
+    year_of_manufacture: '',
+    location: '',
+    ce_certified: true
+  });
 
   useEffect(() => {
     if (user?.clinicId && id) {
@@ -48,7 +55,11 @@ export default function EquipmentDetail() {
       setDevice(deviceRes.data);
       setEditData({ 
         name: deviceRes.data.name, 
-        serial_number: deviceRes.data.serial_number || '' 
+        serial_number: deviceRes.data.serial_number || '',
+        manufacturer: deviceRes.data.manufacturer || '',
+        year_of_manufacture: deviceRes.data.year_of_manufacture || '',
+        location: deviceRes.data.location || '',
+        ce_certified: deviceRes.data.ce_certified ?? true
       });
       setDocuments(docsRes.data || []);
     } catch (error) {
@@ -65,7 +76,11 @@ export default function EquipmentDetail() {
         .from('equipment')
         .update({
           name: editData.name,
-          serial_number: editData.serial_number
+          serial_number: editData.serial_number,
+          manufacturer: editData.manufacturer,
+          year_of_manufacture: editData.year_of_manufacture,
+          location: editData.location,
+          ce_certified: editData.ce_certified
         })
         .eq('id', id);
 
@@ -281,7 +296,7 @@ export default function EquipmentDetail() {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-6 space-y-4 max-h-[60vh] overflow-y-auto">
                 <div>
                   <label className="text-xs font-bold uppercase text-brand-muted mb-1 block">Gerätename</label>
                   <input 
@@ -290,6 +305,26 @@ export default function EquipmentDetail() {
                     value={editData.name}
                     onChange={(e) => setEditData({ ...editData, name: e.target.value })}
                   />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="text-xs font-bold uppercase text-brand-muted mb-1 block">Hersteller</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige"
+                      value={editData.manufacturer}
+                      onChange={(e) => setEditData({ ...editData, manufacturer: e.target.value })}
+                    />
+                  </div>
+                  <div>
+                    <label className="text-xs font-bold uppercase text-brand-muted mb-1 block">Baujahr</label>
+                    <input 
+                      type="text" 
+                      className="w-full px-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige"
+                      value={editData.year_of_manufacture}
+                      onChange={(e) => setEditData({ ...editData, year_of_manufacture: e.target.value })}
+                    />
+                  </div>
                 </div>
                 <div>
                   <label className="text-xs font-bold uppercase text-brand-muted mb-1 block">Seriennummer</label>
@@ -300,10 +335,28 @@ export default function EquipmentDetail() {
                     onChange={(e) => setEditData({ ...editData, serial_number: e.target.value })}
                   />
                 </div>
-                <div className="pt-4 flex gap-3">
-                  <button onClick={() => setIsEditing(false)} className="btn-outline flex-1 py-2">Abbrechen</button>
-                  <button onClick={handleUpdateDevice} className="btn-primary flex-1 py-2">Speichern</button>
+                <div>
+                  <label className="text-xs font-bold uppercase text-brand-muted mb-1 block">Standort (Raum)</label>
+                  <input 
+                    type="text" 
+                    className="w-full px-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige"
+                    value={editData.location}
+                    onChange={(e) => setEditData({ ...editData, location: e.target.value })}
+                  />
                 </div>
+                <div className="flex items-center justify-between p-3 bg-brand-warm-white rounded-brand border border-brand-border">
+                  <span className="text-sm font-bold">CE-Zertifizierung vorhanden</span>
+                  <button 
+                    onClick={() => setEditData({ ...editData, ce_certified: !editData.ce_certified })}
+                    className={`w-12 h-6 rounded-full transition-colors relative ${editData.ce_certified ? 'bg-brand-success' : 'bg-brand-muted'}`}
+                  >
+                    <div className={`absolute top-1 w-4 h-4 bg-white rounded-full transition-all ${editData.ce_certified ? 'left-7' : 'left-1'}`} />
+                  </button>
+                </div>
+              </div>
+              <div className="p-6 border-t border-brand-border flex gap-3">
+                <button onClick={() => setIsEditing(false)} className="btn-outline flex-1 py-2">Abbrechen</button>
+                <button onClick={handleUpdateDevice} className="btn-primary flex-1 py-2">Speichern</button>
               </div>
             </motion.div>
           </div>
