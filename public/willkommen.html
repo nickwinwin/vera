@@ -205,7 +205,7 @@
       <h2 class="serif" style="font-size: 48px; color: var(--ink); margin-bottom: 24px;">Demo anfragen</h2>
       <p style="color: var(--rich-brown); margin-bottom: 48px;">Erleben Sie VERA live. Hinterlassen Sie uns Ihre Daten, und wir melden uns für eine persönliche Vorstellung.</p>
       
-      <form action="mailto:kontakt@vera-docs.de" method="POST" enctype="text/plain" style="display: grid; gap: 20px; text-align: left;">
+      <form id="contactForm" style="display: grid; gap: 20px; text-align: left;">
         <div>
           <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Name des Instituts</label>
           <input type="text" name="institute" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; border: 1px solid var(--sand);">
@@ -222,8 +222,9 @@
           <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Nachricht (Optional)</label>
           <textarea name="message" rows="4" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; resize: vertical; border: 1px solid var(--sand);"></textarea>
         </div>
-        <button type="submit" class="btn-gold" style="justify-content: center; cursor: pointer; border: none; width: 100%; margin-top: 10px;">Anfrage senden</button>
+        <button type="submit" id="submitBtn" class="btn-gold" style="justify-content: center; cursor: pointer; border: none; width: 100%; margin-top: 10px;">Anfrage senden</button>
       </form>
+      <div id="formStatus" style="margin-top: 20px; display: none; padding: 16px; border-radius: 12px;"></div>
     </div>
   </div>
 </section>
@@ -232,5 +233,47 @@
   <p>&copy; 2026 VERA NiSV Audit. Alle Rechte vorbehalten.</p>
 </footer>
 
-</body>
-</html>
+<script>
+  // Form Submission
+  const contactForm = document.getElementById('contactForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const formStatus = document.getElementById('formStatus');
+
+  if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(contactForm);
+      const data = Object.fromEntries(formData.entries());
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Wird gesendet...';
+      
+      try {
+        const response = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data)
+        });
+        
+        if (response.ok) {
+          formStatus.style.display = 'block';
+          formStatus.style.background = '#f0fdf4';
+          formStatus.style.color = '#166534';
+          formStatus.innerText = 'Vielen Dank! Ihre Anfrage wurde erfolgreich gesendet.';
+          contactForm.reset();
+        } else {
+          throw new Error('Fehler beim Senden');
+        }
+      } catch (err) {
+        formStatus.style.display = 'block';
+        formStatus.style.background = '#fef2f2';
+        formStatus.style.color = '#991b1b';
+        formStatus.innerText = 'Entschuldigung, es gab einen Fehler. Bitte versuchen Sie es später erneut.';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = 'Anfrage senden';
+      }
+    });
+  }
+</script>
