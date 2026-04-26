@@ -301,12 +301,18 @@ export default function ClientConsentPage() {
             Ihre Einwilligungserklärung wurde erfolgreich übermittelt. Sie können nun mit der Behandlung beginnen.
           </p>
           <div className="space-y-4">
-            <button 
-              onClick={() => router.push(`/s/${slug}`)}
-              className="btn-primary w-full py-3"
-            >
-              Zurück zum Start
-            </button>
+            {template.category === 'anamnese' ? (
+              <p className="text-brand-secondary text-sm animate-pulse">
+                Sie werden automatisch weitergeleitet...
+              </p>
+            ) : (
+              <button 
+                onClick={() => router.push(`/s/${slug}`)}
+                className="btn-primary w-full py-3"
+              >
+                Zurück zum Start
+              </button>
+            )}
           </div>
         </motion.div>
         
