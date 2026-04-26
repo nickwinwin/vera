@@ -218,6 +218,38 @@
           <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">E-Mail Adresse</label>
           <input type="email" name="email" required style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; border: 1px solid var(--sand);">
         </div>
+        
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Anzahl Standorte</label>
+            <select name="locations" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+              <option value="1">1 Standort</option>
+              <option value="2-5">2-5 Standorte</option>
+              <option value="5+">Mehr als 5</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">NiSV-Geräte</label>
+            <input type="number" name="deviceCount" placeholder="z.B. 3" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; border: 1px solid var(--sand);">
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+          <div>
+            <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Mitarbeiter</label>
+            <input type="number" name="staffCount" placeholder="z.B. 5" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; border: 1px solid var(--sand);">
+          </div>
+          <div>
+            <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Aktuelle Methode</label>
+            <select name="currentMethod" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit;">
+              <option value="Papier">Papier & Ordner</option>
+              <option value="Excel">Excel / Word</option>
+              <option value="Software">Andere Software</option>
+              <option value="Keine">Noch gar keine</option>
+            </select>
+          </div>
+        </div>
+
         <div>
           <label style="display: block; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; color: var(--warm-gray);">Nachricht (Optional)</label>
           <textarea name="message" rows="4" style="width: 100%; padding: 16px; border-radius: 12px; border: 1px solid var(--sand); background: var(--warm-white); font-family: inherit; resize: vertical; border: 1px solid var(--sand);"></textarea>
