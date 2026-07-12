@@ -1,10 +1,17 @@
 import { Resend } from 'resend';
 import { NextResponse } from 'next/server';
 
-const resend = new Resend('re_BEmpugeB_7f3So97REKAViEGyjueUMo4c');
+function getResend() {
+  const apiKey = process.env.RESEND_API_KEY;
+  if (!apiKey) {
+    throw new Error('RESEND_API_KEY environment variable is not set');
+  }
+  return new Resend(apiKey);
+}
 
 export async function POST(request: Request) {
   try {
+    const resend = getResend();
     const body = await request.json();
     const { institute, name, email, message, locations, deviceCount, staffCount, currentMethod } = body;
 

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Shield, ArrowLeft, Loader2, AlertCircle, Printer, Download } from 'lucide-react';
@@ -14,13 +14,7 @@ export default function ViewConsentPage() {
   const [clinic, setClinic] = useState<any>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (docId) {
-      fetchDocument();
-    }
-  }, [docId]);
-
-  const fetchDocument = async () => {
+  const fetchDocument = useCallback(async () => {
     try {
       // 1. Fetch Document with Template and Client info
       const { data: docData, error: docError } = await supabase
@@ -49,7 +43,13 @@ export default function ViewConsentPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [docId]);
+
+  useEffect(() => {
+    if (docId) {
+      fetchDocument();
+    }
+  }, [docId, fetchDocument]);
 
   if (loading) {
     return (
@@ -182,6 +182,7 @@ export default function ViewConsentPage() {
                   <p className="text-[10px] text-brand-muted uppercase font-bold mb-4">Rechtsverbindliche Unterschrift</p>
                   <div className="border border-brand-border rounded-brand p-4 bg-brand-warm-white/30 h-40 flex items-center justify-center">
                     {doc.signature_data ? (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img 
                         src={doc.signature_data} 
                         alt="Signature" 

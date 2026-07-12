@@ -150,6 +150,18 @@ create policy "Owners can update their own clinic"
   on public.clinics for update
   using (auth.uid() = owner_id);
 
+-- Clinic members can view their clinic
+drop policy if exists "Members can view their clinic" on public.clinics;
+create policy "Members can view their clinic"
+  on public.clinics for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = clinics.id
+      and clinic_members.user_id = auth.uid()
+    )
+  );
+
 -- Equipment: Owners can manage equipment for their clinic
 drop policy if exists "Owners can manage their clinic equipment" on public.equipment;
 create policy "Owners can manage their clinic equipment"
@@ -159,6 +171,18 @@ create policy "Owners can manage their clinic equipment"
       select 1 from public.clinics
       where clinics.id = equipment.clinic_id
       and clinics.owner_id = auth.uid()
+    )
+  );
+
+-- Clinic members can view equipment
+drop policy if exists "Members can view equipment" on public.equipment;
+create policy "Members can view equipment"
+  on public.equipment for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = equipment.clinic_id
+      and clinic_members.user_id = auth.uid()
     )
   );
 
@@ -179,6 +203,18 @@ create policy "Public can insert clients"
   on public.clients for insert
   with check (true);
 
+-- Clinic members can view clients
+drop policy if exists "Members can view clients" on public.clients;
+create policy "Members can view clients"
+  on public.clients for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = clients.clinic_id
+      and clinic_members.user_id = auth.uid()
+    )
+  );
+
 -- Consent Templates: Owners can manage templates for their clinic
 drop policy if exists "Owners can manage their clinic templates" on public.consent_templates;
 create policy "Owners can manage their clinic templates"
@@ -188,6 +224,18 @@ create policy "Owners can manage their clinic templates"
       select 1 from public.clinics
       where clinics.id = consent_templates.clinic_id
       and clinics.owner_id = auth.uid()
+    )
+  );
+
+-- Clinic members can view templates
+drop policy if exists "Members can view templates" on public.consent_templates;
+create policy "Members can view templates"
+  on public.consent_templates for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = consent_templates.clinic_id
+      and clinic_members.user_id = auth.uid()
     )
   );
 
@@ -215,6 +263,18 @@ create policy "Owners can manage their clinic procedures"
     )
   );
 
+-- Clinic members can view procedures
+drop policy if exists "Members can view procedures" on public.procedures;
+create policy "Members can view procedures"
+  on public.procedures for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = procedures.clinic_id
+      and clinic_members.user_id = auth.uid()
+    )
+  );
+
 drop policy if exists "Public can view procedures" on public.procedures;
 create policy "Public can view procedures"
   on public.procedures for select
@@ -234,6 +294,18 @@ create policy "Owners can manage their clinic equipment documents"
       select 1 from public.clinics
       where clinics.id = equipment_documents.clinic_id
       and clinics.owner_id = auth.uid()
+    )
+  );
+
+-- Clinic members can view equipment documents
+drop policy if exists "Members can view equipment documents" on public.equipment_documents;
+create policy "Members can view equipment documents"
+  on public.equipment_documents for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = equipment_documents.clinic_id
+      and clinic_members.user_id = auth.uid()
     )
   );
 
@@ -258,6 +330,18 @@ create policy "Owners can manage their clinic documents"
       select 1 from public.clinics
       where clinics.id = consent_documents.clinic_id
       and clinics.owner_id = auth.uid()
+    )
+  );
+
+-- Clinic members can view consent documents
+drop policy if exists "Members can view consent documents" on public.consent_documents;
+create policy "Members can view consent documents"
+  on public.consent_documents for select
+  using (
+    exists (
+      select 1 from public.clinic_members
+      where clinic_members.clinic_id = consent_documents.clinic_id
+      and clinic_members.user_id = auth.uid()
     )
   );
 

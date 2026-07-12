@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useI18n } from '@/hooks/use-i18n';
 import { Building, MapPin, Phone, Mail, Globe, Camera, Save, Bell, Shield, Users, Loader2, Laptop } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -28,14 +28,7 @@ export default function SettingsPage() {
 
   const categories = proceduresData.filter(p => p.id !== 'anamnese');
 
-  useEffect(() => {
-    if (user?.clinicId) {
-      fetchClinicData();
-      fetchEquipment();
-    }
-  }, [user]);
-
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('equipment')
@@ -47,7 +40,39 @@ export default function SettingsPage() {
     } catch (error) {
       console.error('Error fetching equipment:', error);
     }
-  };
+  }, [user]);
+
+  const fetchClinicData = useCallback(async () => {
+    try {
+      const { data, error } = await supabase
+        .from('clinics')
+        .select('*')
+        .eq('id', user!.clinicId)
+        .single();
+
+      if (error) throw error;
+      setFormData({
+        name: data.name || '',
+        owner_id: data.owner_id || '',
+        email: data.email || '',
+        phone: data.phone || '',
+        address: data.address || '',
+        website: data.website || '',
+        logo_url: data.logo_url || ''
+      });
+    } catch (error) {
+      console.error('Error fetching clinic data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.clinicId) {
+      fetchClinicData();
+      fetchEquipment();
+    }
+  }, [user, fetchClinicData, fetchEquipment]);
 
   const handleUpdateDevice = async (categoryId: string, name: string) => {
     try {
@@ -77,31 +102,6 @@ export default function SettingsPage() {
     } catch (error) {
       console.error('Error updating device:', error);
       toast.error('Fehler beim Aktualisieren');
-    }
-  };
-
-  const fetchClinicData = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('clinics')
-        .select('*')
-        .eq('id', user!.clinicId)
-        .single();
-
-      if (error) throw error;
-      setFormData({
-        name: data.name || '',
-        owner_id: data.owner_id || '',
-        email: data.email || '',
-        phone: data.phone || '',
-        address: data.address || '',
-        website: data.website || '',
-        logo_url: data.logo_url || ''
-      });
-    } catch (error) {
-      console.error('Error fetching clinic data:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -158,6 +158,7 @@ export default function SettingsPage() {
             <div className="relative inline-block mb-4">
               <div className="w-32 h-32 bg-brand-warm-white rounded-full border-2 border-brand-border flex items-center justify-center overflow-hidden">
                 {formData.logo_url ? (
+                  // eslint-disable-next-line @next/next/no-img-element
                   <img src={formData.logo_url} alt="Logo" className="w-full h-full object-cover" />
                 ) : (
                   <Building className="w-16 h-16 text-brand-beige/20" />

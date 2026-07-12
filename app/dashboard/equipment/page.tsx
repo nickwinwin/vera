@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useI18n } from '@/hooks/use-i18n';
 import { Shield, FileText, AlertCircle, CheckCircle2, MoreVertical, Upload, Plus, Loader2, Settings } from 'lucide-react';
 import proceduresData from '@/data/procedures.json';
@@ -19,13 +19,7 @@ export default function MyEquipment() {
   // Filter out anamnese as it's not a device category
   const categories = proceduresData.filter(p => p.id !== 'anamnese');
 
-  useEffect(() => {
-    if (user?.clinicId) {
-      fetchEquipment();
-    }
-  }, [user]);
-
-  const fetchEquipment = async () => {
+  const fetchEquipment = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('equipment')
@@ -45,7 +39,13 @@ export default function MyEquipment() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.clinicId) {
+      fetchEquipment();
+    }
+  }, [user, fetchEquipment]);
 
   const getCategoryStatus = (categoryId: string) => {
     const device = equipment.find(e => e.category_id === categoryId || e.type === categoryId);

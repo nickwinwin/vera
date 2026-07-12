@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useI18n } from '@/hooks/use-i18n';
 import { 
@@ -38,13 +38,7 @@ export default function EquipmentDetail() {
     ce_certified: true
   });
 
-  useEffect(() => {
-    if (user?.clinicId && id) {
-      fetchDeviceData();
-    }
-  }, [user, id]);
-
-  const fetchDeviceData = async () => {
+  const fetchDeviceData = useCallback(async () => {
     try {
       const [deviceRes, docsRes] = await Promise.all([
         supabase.from('equipment').select('*').eq('id', id).single(),
@@ -68,7 +62,13 @@ export default function EquipmentDetail() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [id]);
+
+  useEffect(() => {
+    if (user?.clinicId && id) {
+      fetchDeviceData();
+    }
+  }, [user, id, fetchDeviceData]);
 
   const handleUpdateDevice = async () => {
     try {

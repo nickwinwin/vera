@@ -363,6 +363,7 @@ export default function ClientConsentPage() {
                   <p className="font-bold mb-2">Digitale Unterschrift:</p>
                   <div className="border border-black h-32 w-64 flex items-center justify-center">
                     {signatureData && (
+                      // eslint-disable-next-line @next/next/no-img-element
                       <img 
                         src={signatureData} 
                         alt="Signature" 

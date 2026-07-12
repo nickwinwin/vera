@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useI18n } from '@/hooks/use-i18n';
 import { useAuth } from '@/hooks/use-auth';
 import { supabase } from '@/lib/supabase';
@@ -46,13 +46,7 @@ export default function TreatmentLogsPage() {
     performed_by_name: ''
   });
 
-  useEffect(() => {
-    if (user?.clinicId) {
-      fetchDocuments();
-    }
-  }, [user]);
-
-  const fetchDocuments = async () => {
+  const fetchDocuments = useCallback(async () => {
     try {
       const { data, error } = await supabase
         .from('consent_documents')
@@ -71,7 +65,13 @@ export default function TreatmentLogsPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [user]);
+
+  useEffect(() => {
+    if (user?.clinicId) {
+      fetchDocuments();
+    }
+  }, [user, fetchDocuments]);
 
   const handleOpenDetails = (doc: any) => {
     setSelectedDoc(doc);
