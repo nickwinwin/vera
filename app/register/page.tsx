@@ -3,27 +3,54 @@
 import { useState } from 'react';
 import { useAuth } from '@/hooks/use-auth';
 import { useI18n } from '@/hooks/use-i18n';
-import { Shield, Building, User, CreditCard, Check } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { Building, User, CreditCard, Check } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
+import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
-  const { login } = useAuth();
   const { t } = useI18n();
+  const router = useRouter();
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
   const [formData, setFormData] = useState({
     clinicName: '',
     ownerName: '',
     email: '',
+    password: '',
     plan: 'pro'
   });
 
   const nextStep = () => setStep(s => s + 1);
   const prevStep = () => setStep(s => s - 1);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login(formData.email, 'clinic');
+    setLoading(true);
+    setError('');
+
+    const { data, error: signUpError } = await supabase.auth.signUp({
+      email: formData.email,
+      password: formData.password,
+    });
+
+    if (signUpError || !data.user) {
+      setError(signUpError?.message || 'Registrierung fehlgeschlagen');
+      setLoading(false);
+      return;
+    }
+
+    const defaultSlug = formData.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
+    await supabase.from('clinics').insert({
+      name: formData.clinicName || 'Meine Klinik',
+      slug: `${defaultSlug}-${Math.random().toString(36).substring(2, 5)}`,
+      owner_id: data.user.id,
+      email: formData.email,
+    });
+
+    router.push('/dashboard');
   };
 
   return (
@@ -72,6 +99,16 @@ export default function RegisterPage() {
                   placeholder="kontakt@studio.de"
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium mb-2">Passwort</label>
+                <input 
+                  type="password" 
+                  className="input-field" 
+                  placeholder="Mindestens 6 Zeichen"
+                  value={formData.password}
+                  onChange={e => setFormData({...formData, password: e.target.value})}
                 />
               </div>
               <button onClick={nextStep} className="btn-primary w-full py-3">Weiter</button>
@@ -136,9 +173,12 @@ export default function RegisterPage() {
                   </label>
                 ))}
               </div>
+              {error && <p className="text-sm text-red-500 text-center">{error}</p>}
               <div className="flex gap-4">
                 <button onClick={prevStep} className="btn-outline flex-1 py-3">Zurück</button>
-                <button onClick={handleSubmit} className="btn-primary flex-1 py-3">Registrierung abschließen</button>
+                <button onClick={handleSubmit} disabled={loading} className="btn-primary flex-1 py-3">
+                  {loading ? 'Wird erstellt...' : 'Registrierung abschließen'}
+                </button>
               </div>
             </div>
           )}

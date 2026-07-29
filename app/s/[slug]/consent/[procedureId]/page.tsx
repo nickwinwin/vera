@@ -30,6 +30,24 @@ export default function ClientConsentPage() {
 
   useEffect(() => {
     fetchTemplateAndClinic();
+
+    // Merge health data from the forms page into formData
+    const healthData = sessionStorage.getItem(`health_${slug}`);
+    if (healthData) {
+      try {
+        const parsed = JSON.parse(healthData);
+        setFormData(prev => ({ ...prev, ...parsed }));
+      } catch {}
+    }
+
+    // Pre-fill client info from auth page
+    const clientData = sessionStorage.getItem(`client_${slug}`);
+    if (clientData) {
+      try {
+        const parsed = JSON.parse(clientData);
+        setFormData(prev => ({ ...prev, first_name: parsed.first_name, last_name: parsed.last_name, email: parsed.email }));
+      } catch {}
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [slug, procedureId]);
 

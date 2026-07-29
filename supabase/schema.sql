@@ -22,6 +22,10 @@ create table if not exists public.equipment (
   name text not null,
   type text not null,
   serial_number text,
+  manufacturer text,
+  year_of_manufacture text,
+  location text,
+  ce_certified boolean default true,
   last_maintenance date,
   next_maintenance date,
   status text default 'active',
@@ -349,3 +353,20 @@ drop policy if exists "Public can insert consent documents" on public.consent_do
 create policy "Public can insert consent documents"
   on public.consent_documents for insert
   with check (true);
+
+-- Migration: Add missing columns to equipment table (for existing databases)
+do $$
+begin
+  if not exists (select 1 from information_schema.columns where table_name='equipment' and column_name='manufacturer') then
+    alter table public.equipment add column manufacturer text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='equipment' and column_name='year_of_manufacture') then
+    alter table public.equipment add column year_of_manufacture text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='equipment' and column_name='location') then
+    alter table public.equipment add column location text;
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name='equipment' and column_name='ce_certified') then
+    alter table public.equipment add column ce_certified boolean default true;
+  end if;
+end $$;

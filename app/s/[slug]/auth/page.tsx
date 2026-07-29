@@ -3,19 +3,64 @@
 import { useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useI18n } from '@/hooks/use-i18n';
-import { Shield, Mail, Lock, User, ArrowRight, ArrowLeft } from 'lucide-react';
+import { supabase } from '@/lib/supabase';
+import { Shield, Mail, Lock, User, ArrowRight, ArrowLeft, Loader2 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { toast } from 'sonner';
 
 export default function ClientAuthPage() {
   const { slug } = useParams();
   const router = useRouter();
   const { t } = useI18n();
   const [isLogin, setIsLogin] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // In real app, authenticate client
-    router.push(`/s/${slug}/consent/anamnese`);
+    setLoading(true);
+
+    try {
+      // Get clinic id from slug
+      const { data: clinic } = await supabase
+        .from('clinics')
+        .select('id')
+        .eq('slug', slug)
+        .single();
+
+      if (!clinic) {
+        toast.error('Salon nicht gefunden');
+        setLoading(false);
+        return;
+      }
+
+      // Find or create client
+      const nameParts = name ? name.trim().split(' ') : [email.split('@')[0], ''];
+      const { data: client } = await supabase
+        .from('clients')
+        .insert({
+          clinic_id: clinic.id,
+          first_name: nameParts[0] || '',
+          last_name: nameParts.slice(1).join(' ') || '',
+          email: email,
+        })
+        .select()
+        .single();
+
+      // Store client info in sessionStorage for the consent flow
+      if (client) {
+        sessionStorage.setItem(`client_${slug}`, JSON.stringify(client));
+      }
+
+      router.push(`/s/${slug}/consent/anamnese`);
+    } catch (error) {
+      console.error('Client auth error:', error);
+      toast.error('Fehler bei der Anmeldung');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -50,7 +95,8 @@ export default function ClientAuthPage() {
                 <label className="block text-sm font-medium text-brand-secondary mb-2">Vollständiger Name</label>
                 <div className="relative">
                   <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-muted" />
-                  <input type="text" className="input-field pl-11 pr-4" placeholder="Max Mustermann" required />
+                  <input type="text" className="input-field pl-11 pr-4" placeholder="Max Mustermann" required
+                    value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
               </div>
             )}
@@ -59,7 +105,8 @@ export default function ClientAuthPage() {
               <label className="block text-sm font-medium text-brand-secondary mb-2">E-Mail-Adresse</label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-muted" />
-                <input type="email" className="input-field pl-11 pr-4" placeholder="name@beispiel.de" required />
+                <input type="email" className="input-field pl-11 pr-4" placeholder="name@beispiel.de" required
+                  value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
             </div>
 
@@ -67,11 +114,13 @@ export default function ClientAuthPage() {
               <label className="block text-sm font-medium text-brand-secondary mb-2">Passwort</label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-brand-muted" />
-                <input type="password" className="input-field pl-11 pr-4" placeholder="••••••••" required />
+                <input type="password" className="input-field pl-11 pr-4" placeholder="••••••••" required
+                  value={password} onChange={(e) => setPassword(e.target.value)} />
               </div>
             </div>
 
-            <button type="submit" className="btn-primary w-full py-4 flex items-center justify-center gap-2">
+            <button type="submit" disabled={loading} className="btn-primary w-full py-4 flex items-center justify-center gap-2 disabled:opacity-50">
+              {loading ? <Loader2 className="w-5 h-5 animate-spin" /> : null}
               {isLogin ? 'Anmelden' : 'Konto erstellen'} <ArrowRight className="w-5 h-5" />
             </button>
 

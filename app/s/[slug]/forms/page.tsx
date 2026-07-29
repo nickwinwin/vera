@@ -39,7 +39,11 @@ export default function ClientFormsPage() {
     if (step === 1) {
       setStep(2);
     } else {
-      // After finishing the health questionnaire, go to choose the procedure
+      // Save health data to sessionStorage for the consent flow
+      sessionStorage.setItem(`health_${slug}`, JSON.stringify({
+        ...healthData,
+        ...sensitivityData
+      }));
       router.push(`/s/${slug}/procedures`);
     }
   };

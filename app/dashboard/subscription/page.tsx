@@ -87,7 +87,7 @@ export default function SubscriptionPage() {
                 Aktueller Plan
               </span>
             )}
-            <h3 className="text-xl font-bold mb-1">{plan.name}</h3>
+            <h3 className="text-xl font-bold mb-1 text-brand-dark">{plan.name}</h3>
             <div className="flex items-baseline gap-1 mb-6">
               <span className="text-3xl font-display font-bold">{plan.price}</span>
               <span className="text-brand-muted text-sm">/ Monat</span>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useI18n } from '@/hooks/use-i18n';
 import { 
@@ -72,16 +72,23 @@ export default function EquipmentDetail() {
 
   const handleUpdateDevice = async () => {
     try {
+      const dbColumns = Object.keys(device);
+      const updates: Record<string, any> = {};
+      const fields = [
+        ['name', editData.name],
+        ['serial_number', editData.serial_number],
+        ['manufacturer', editData.manufacturer],
+        ['year_of_manufacture', editData.year_of_manufacture],
+        ['location', editData.location],
+        ['ce_certified', editData.ce_certified],
+      ] as const;
+      for (const [col, val] of fields) {
+        if (dbColumns.includes(col)) updates[col] = val;
+      }
+
       const { error } = await supabase
         .from('equipment')
-        .update({
-          name: editData.name,
-          serial_number: editData.serial_number,
-          manufacturer: editData.manufacturer,
-          year_of_manufacture: editData.year_of_manufacture,
-          location: editData.location,
-          ce_certified: editData.ce_certified
-        })
+        .update(updates)
         .eq('id', id);
 
       if (error) throw error;
@@ -94,25 +101,46 @@ export default function EquipmentDetail() {
     }
   };
 
-  const handleUpload = async (docType: string) => {
-    setUploading(docType);
-    
-    // Simulate file selection and upload for now, but save to DB
-    // In a real app, we would use an <input type="file">
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [pendingDocType, setPendingDocType] = useState<string | null>(null);
+
+  const handleUploadClick = (docType: string) => {
+    setPendingDocType(docType);
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelected = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !pendingDocType) return;
+
+    setUploading(pendingDocType);
+    const docType = pendingDocType;
+
     try {
-      const { error } = await supabase
+      const filePath = `${user!.clinicId}/${id}/${Date.now()}_${file.name}`;
+      const { error: uploadError } = await supabase.storage
+        .from('equipment-documents')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('equipment-documents')
+        .getPublicUrl(filePath);
+
+      const { error: dbError } = await supabase
         .from('equipment_documents')
         .insert([{
           equipment_id: id,
           clinic_id: user!.clinicId,
           name: docType,
           type: docType,
-          file_url: 'https://placeholder.com/doc.pdf', // Mock URL for now
+          file_url: publicUrl,
           status: 'valid'
         }]);
 
-      if (error) throw error;
-      
+      if (dbError) throw dbError;
+
       toast.success(`${docType} erfolgreich hochgeladen`);
       fetchDeviceData();
     } catch (error) {
@@ -120,6 +148,8 @@ export default function EquipmentDetail() {
       toast.error('Fehler beim Hochladen');
     } finally {
       setUploading(null);
+      setPendingDocType(null);
+      if (fileInputRef.current) fileInputRef.current.value = '';
     }
   };
 
@@ -158,6 +188,14 @@ export default function EquipmentDetail() {
 
   return (
     <div className="space-y-8">
+      {/* Hidden file input */}
+      <input 
+        ref={fileInputRef}
+        type="file" 
+        className="hidden" 
+        onChange={handleFileSelected}
+        accept=".pdf,.doc,.docx,.png,.jpg,.jpeg"
+      />
       <button 
         onClick={() => router.back()}
         className="flex items-center gap-2 text-brand-secondary hover:text-brand-beige transition-colors"
@@ -235,7 +273,7 @@ export default function EquipmentDetail() {
                       </div>
                     ) : (
                       <button 
-                        onClick={() => handleUpload(doc)}
+                        onClick={() => handleUploadClick(doc)}
                         disabled={isUploading}
                         className="btn-outline py-2 px-4 text-sm flex items-center gap-2 disabled:opacity-50"
                       >
