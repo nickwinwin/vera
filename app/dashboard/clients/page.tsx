@@ -17,7 +17,9 @@ import {
   X,
   Phone,
   Mail,
-  MapPin
+  MapPin,
+  Plus,
+  UserPlus
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { toast } from 'sonner';
@@ -29,6 +31,9 @@ export default function ClientsPage() {
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedClient, setSelectedClient] = useState<any>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addForm, setAddForm] = useState({ first_name: '', last_name: '', email: '', phone: '', address: '' });
+  const [addLoading, setAddLoading] = useState(false);
 
   useEffect(() => {
     if (user?.clinicId) {
@@ -67,6 +72,35 @@ export default function ClientsPage() {
     }
   };
 
+  const handleAddClient = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!addForm.first_name || !addForm.last_name) {
+      toast.error('Vor- und Nachname sind erforderlich');
+      return;
+    }
+    setAddLoading(true);
+    try {
+      const { error } = await supabase.from('clients').insert({
+        clinic_id: user!.clinicId,
+        first_name: addForm.first_name,
+        last_name: addForm.last_name,
+        email: addForm.email || null,
+        phone: addForm.phone || null,
+        address: addForm.address || null,
+      });
+      if (error) throw error;
+      toast.success('Klient angelegt');
+      setShowAddModal(false);
+      setAddForm({ first_name: '', last_name: '', email: '', phone: '', address: '' });
+      fetchClients();
+    } catch (error) {
+      console.error('Error adding client:', error);
+      toast.error('Fehler beim Anlegen');
+    } finally {
+      setAddLoading(false);
+    }
+  };
+
   const filteredClients = clients.filter(client => 
     `${client.first_name} ${client.last_name}`.toLowerCase().includes(searchTerm.toLowerCase()) ||
     client.email?.toLowerCase().includes(searchTerm.toLowerCase())
@@ -79,8 +113,8 @@ export default function ClientsPage() {
           <h1 className="text-3xl font-display font-bold">{t('dashboard.clients')}</h1>
           <p className="text-brand-secondary">Verwalten Sie Ihre Kunden und deren Behandlungsdokumentation.</p>
         </div>
-        <button className="btn-primary flex items-center gap-2">
-          <PlusIcon className="w-5 h-5" /> Neuer Kunde
+        <button onClick={() => setShowAddModal(true)} className="btn-primary flex items-center gap-2">
+          <Plus className="w-5 h-5" /> Neuer Kunde
         </button>
       </div>
 
@@ -258,16 +292,65 @@ export default function ClientsPage() {
           </div>
         )}
       </AnimatePresence>
-    </div>
-  );
-}
 
-function PlusIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
+      {/* Add Client Modal */}
+      <AnimatePresence>
+        {showAddModal && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setShowAddModal(false)}
+              className="absolute inset-0 bg-brand-dark/40 backdrop-blur-sm"
+            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-6 border-b border-brand-border flex justify-between items-center">
+                <h2 className="text-xl font-display font-bold">Neuen Kunden anlegen</h2>
+                <button onClick={() => setShowAddModal(false)} className="p-2 hover:bg-brand-warm-white rounded-full">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+              <form onSubmit={handleAddClient} className="p-6 space-y-5">
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Vorname *</label>
+                    <input type="text" className="input-field" placeholder="Max" value={addForm.first_name} onChange={e => setAddForm({...addForm, first_name: e.target.value})} required />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium mb-1.5">Nachname *</label>
+                    <input type="text" className="input-field" placeholder="Mustermann" value={addForm.last_name} onChange={e => setAddForm({...addForm, last_name: e.target.value})} required />
+                  </div>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">E-Mail</label>
+                  <input type="email" className="input-field" placeholder="max@beispiel.de" value={addForm.email} onChange={e => setAddForm({...addForm, email: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Telefon</label>
+                  <input type="tel" className="input-field" placeholder="+49 123 456789" value={addForm.phone} onChange={e => setAddForm({...addForm, phone: e.target.value})} />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium mb-1.5">Adresse</label>
+                  <input type="text" className="input-field" placeholder="Musterstraße 1, 10115 Berlin" value={addForm.address} onChange={e => setAddForm({...addForm, address: e.target.value})} />
+                </div>
+                <div className="flex gap-3 pt-2">
+                  <button type="button" onClick={() => setShowAddModal(false)} className="btn-outline flex-1 py-3">Abbrechen</button>
+                  <button type="submit" disabled={addLoading} className="btn-primary flex-1 py-3 flex items-center justify-center gap-2 disabled:opacity-50">
+                    {addLoading ? 'Wird angelegt...' : <><UserPlus className="w-4 h-4" /> Kunde anlegen</>}
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

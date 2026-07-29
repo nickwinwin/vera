@@ -186,10 +186,11 @@ export default function ClientConsentPage() {
     }
   };
 
-  const handleSubmit = async () => {
+const handleSubmit = async () => {
     if (!hasSigned || !clinic || !template) return;
     
     setIsSubmitting(true);
+    let consentDocId: string | undefined;
     try {
       // 1. Create/Find Client
       let clientId;
@@ -244,8 +245,8 @@ export default function ClientConsentPage() {
         }
       }
 
-      // 2. Save Document
-      const { error: docError } = await supabase
+// 2. Save Document
+      const { error: docError, data: docData } = await supabase
         .from('consent_documents')
         .insert({
           clinic_id: clinic.id,
@@ -263,9 +264,40 @@ export default function ClientConsentPage() {
             energy: '',
             notes: ''
           }
-        });
+        })
+        .select('id')
+        .single();
 
       if (docError) throw docError;
+
+      consentDocId = docData?.id;
+
+      // 3. Generate and upload PDF
+      try {
+        const element = pdfRef.current;
+        if (element) {
+          const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF('p', 'mm', 'a4');
+          const imgProps = pdf.getImageProperties(imgData);
+          const pdfWidth = pdf.internal.pageSize.getWidth();
+          const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+          pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+          const pdfBlob = pdf.output('blob');
+          const filePath = `${clinic.id}/${consentDocId}_${Date.now()}.pdf`;
+          const { error: uploadError } = await supabase.storage
+            .from('consent-pdfs')
+            .upload(filePath, pdfBlob, { contentType: 'application/pdf' });
+          if (!uploadError) {
+            const { data: { publicUrl } } = supabase.storage
+              .from('consent-pdfs')
+              .getPublicUrl(filePath);
+            await supabase.from('consent_documents').update({ pdf_url: publicUrl }).eq('id', consentDocId);
+          }
+        }
+      } catch (pdfError) {
+        console.error('PDF generation/upload error:', pdfError);
+      }
 
       setIsCompleted(true);
       toast.success('Einwilligung erfolgreich übermittelt');
@@ -324,12 +356,20 @@ export default function ClientConsentPage() {
                 Sie werden automatisch weitergeleitet...
               </p>
             ) : (
-              <button 
-                onClick={() => router.push(`/s/${slug}`)}
-                className="btn-primary w-full py-3"
-              >
-                Zurück zum Start
-              </button>
+              <div className="space-y-3">
+                <button 
+                  onClick={() => router.push(`/s/${slug}`)}
+                  className="btn-primary w-full py-3"
+                >
+                  Zurück zum Start
+                </button>
+                <button 
+                  onClick={generatePDF}
+                  className="btn-outline w-full py-3 flex items-center justify-center gap-2"
+                >
+                  <Download className="w-4 h-4" /> PDF herunterladen
+                </button>
+              </div>
             )}
           </div>
         </motion.div>
@@ -547,7 +587,13 @@ export default function ClientConsentPage() {
                 <><Check className="w-5 h-5" /> Dokument signieren</>
               )}
             </button>
-            <button className="btn-outline flex-1 py-4 flex items-center justify-center gap-2">
+            <button
+              onClick={() => {
+                sessionStorage.removeItem('vera_client_session');
+                router.push(`/s/${slug}/procedures`);
+              }}
+              className="btn-outline flex-1 py-4 flex items-center justify-center gap-2"
+            >
               Abbrechen
             </button>
           </div>

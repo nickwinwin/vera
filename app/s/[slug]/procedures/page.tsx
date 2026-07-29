@@ -120,7 +120,7 @@ export default function ClientProceduresPage() {
             Ihre Behandlung ist nicht dabei?
           </p>
           <button 
-            onClick={() => router.push(`/s/${slug}/consent/sign/other`)}
+            onClick={() => router.push(`/s/${slug}/procedures`)}
             className="btn-outline w-full py-3"
           >
             Andere Behandlung wählen

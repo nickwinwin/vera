@@ -169,7 +169,7 @@ export default function DashboardOverview() {
         <div className="lg:col-span-2 medical-card bg-white p-6">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold">Letzte Aktivitäten</h2>
-            <button className="text-sm text-brand-beige font-bold hover:underline">Alle sehen</button>
+            <Link href="/dashboard/procedures/logs" className="text-sm text-brand-beige font-bold hover:underline">Alle sehen</Link>
           </div>
           <div className="space-y-6">
             {recentActivities.length === 0 ? (
