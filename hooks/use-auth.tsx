@@ -104,7 +104,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         clinic = newClinic;
       }
 
-      const role: UserRole = supabaseUser.email?.includes('admin') ? 'admin' : 'clinic';
+      const adminEmails = (process.env.NEXT_PUBLIC_ADMIN_EMAILS || '').split(',').map(e => e.trim().toLowerCase());
+      const role: UserRole = adminEmails.includes(supabaseUser.email?.toLowerCase() || '') ? 'admin' : 'clinic';
 
       const profile: User = {
         id: supabaseUser.id,

@@ -145,9 +145,9 @@ export default function LandingPage() {
               <span className="text-xl font-display font-bold">VERA</span>
             </div>
             <div className="flex gap-8 text-sm text-brand-secondary">
-              <Link href="#" className="hover:text-brand-beige">Impressum</Link>
-              <Link href="#" className="hover:text-brand-beige">Datenschutz</Link>
-              <Link href="#" className="hover:text-brand-beige">AGB</Link>
+              <Link href="/impressum" className="hover:text-brand-beige">Impressum</Link>
+              <Link href="/datenschutz" className="hover:text-brand-beige">Datenschutz</Link>
+              <Link href="/agb" className="hover:text-brand-beige">AGB</Link>
             </div>
             <p className="text-sm text-brand-muted">© 2026 VERA NiSV-AUDIT. Alle Rechte vorbehalten.</p>
           </div>

@@ -137,7 +137,7 @@ export default function DashboardOverview() {
           <h1 className="text-3xl font-display font-bold">Willkommen, {user?.name}</h1>
           <p className="text-brand-secondary">Hier ist die Übersicht für Ihr Studio heute.</p>
         </div>
-        <SeedButton />
+        {process.env.NEXT_PUBLIC_SHOW_SEED === 'true' && <SeedButton />}
       </div>
 
       {/* Stats Grid */}

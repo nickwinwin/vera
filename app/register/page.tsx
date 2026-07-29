@@ -1,20 +1,18 @@
 'use client';
 
 import { useState } from 'react';
-import { useAuth } from '@/hooks/use-auth';
 import { useI18n } from '@/hooks/use-i18n';
 import { supabase } from '@/lib/supabase';
-import { Building, User, CreditCard, Check } from 'lucide-react';
+import { Building, User, CreditCard, Check, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { motion } from 'motion/react';
-import { useRouter } from 'next/navigation';
 
 export default function RegisterPage() {
   const { t } = useI18n();
-  const router = useRouter();
   const [step, setStep] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [registered, setRegistered] = useState(false);
   const [formData, setFormData] = useState({
     clinicName: '',
     ownerName: '',
@@ -31,13 +29,25 @@ export default function RegisterPage() {
     setLoading(true);
     setError('');
 
+    if (formData.password.length < 6) {
+      setError('Das Passwort muss mindestens 6 Zeichen lang sein.');
+      setLoading(false);
+      return;
+    }
+
     const { data, error: signUpError } = await supabase.auth.signUp({
       email: formData.email,
       password: formData.password,
     });
 
-    if (signUpError || !data.user) {
-      setError(signUpError?.message || 'Registrierung fehlgeschlagen');
+    if (signUpError) {
+      setError(signUpError.message);
+      setLoading(false);
+      return;
+    }
+
+    if (!data.user) {
+      setError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
       setLoading(false);
       return;
     }
@@ -50,8 +60,27 @@ export default function RegisterPage() {
       email: formData.email,
     });
 
-    router.push('/dashboard');
+    setRegistered(true);
+    setLoading(false);
   };
+
+  if (registered) {
+    return (
+      <div className="min-h-screen bg-brand-warm-white flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white rounded-brand p-8 medical-card text-center">
+          <Mail className="w-16 h-16 text-brand-beige mx-auto mb-6" />
+          <h1 className="text-2xl font-display font-bold mb-4">Registrierung erfolgreich!</h1>
+          <p className="text-brand-secondary mb-6">
+            Wir haben eine Bestätigungs-E-Mail an <strong>{formData.email}</strong> gesendet.
+            Bitte klicken Sie auf den Link in der E-Mail, um Ihr Konto zu aktivieren.
+          </p>
+          <Link href="/login" className="btn-primary inline-block py-3 px-8">
+            Zum Login
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-brand-warm-white flex items-center justify-center p-4">

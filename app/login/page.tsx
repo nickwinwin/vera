@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuth, UserRole } from '@/hooks/use-auth';
 import { useI18n } from '@/hooks/use-i18n';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 import { motion } from 'motion/react';
 
 export default function LoginPage() {
-  const { login } = useAuth();
+  const { login, user, isLoading: authLoading } = useAuth();
   const { t } = useI18n();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -18,10 +18,21 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
+  useEffect(() => {
+    if (!authLoading && user) {
+      if (user.role === 'admin') router.push('/admin');
+      else router.push('/dashboard');
+    }
+  }, [user, authLoading, router]);
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
       setError('Bitte füllen Sie alle Felder aus.');
+      return;
+    }
+    if (password.length < 6) {
+      setError('Das Passwort muss mindestens 6 Zeichen lang sein.');
       return;
     }
 
@@ -32,10 +43,8 @@ export default function LoginPage() {
       const { error } = await login(email, password);
       if (error) {
         setError('Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.');
-      } else {
-        // Redirection is handled by the AuthProvider's state change listener or manually here
-        // Since we want specific redirects based on role, we can wait for the user to be set
       }
+      // redirect handled by useEffect above
     } catch (err) {
       setError('Ein unerwarteter Fehler ist aufgetreten.');
     } finally {
@@ -111,11 +120,6 @@ export default function LoginPage() {
               {t('auth.create_account')}
             </Link>
           </p>
-          <div className="mt-4 flex flex-col gap-2 text-xs text-brand-muted">
-            <p>Admin Demo: admin@vera.de</p>
-            <p>Clinic Demo: clinic@studio.de</p>
-            <p>Client Demo: client@user.de</p>
-          </div>
         </div>
       </motion.div>
     </div>
