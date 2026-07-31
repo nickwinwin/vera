@@ -35,11 +35,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (firstMount.current) {
+      console.log('[Auth] First Strict Mode mount, skipping');
       firstMount.current = false;
       return;
     }
+    console.log('[Auth] Second mount, initializing...');
     let cancelled = false;
-    const TIMEOUT_MS = 15000;
+    const TIMEOUT_MS = 5000;
 
     const timeoutId = setTimeout(() => {
       if (!cancelled) {
@@ -49,6 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Initial session check
     supabase.auth.getSession().then(({ data: { session } }) => {
+      console.log('[Auth] getSession resolved, cancelled=', cancelled, 'session=', !!session);
       if (cancelled) return;
       clearTimeout(timeoutId);
       setSession(session);
@@ -57,7 +60,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setIsLoading(false);
       }
-    }).catch(() => {
+    }).catch((err) => {
+      console.error('[Auth] getSession failed:', err);
       if (!cancelled) {
         clearTimeout(timeoutId);
         setIsLoading(false);
@@ -143,14 +147,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
-      const result = await Promise.race([
-        supabase.auth.signInWithPassword({ email, password }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.')), 15000)
-        ),
-      ]);
-      return { error: (result as { error: any })?.error };
+      console.log('[Auth] login() called, calling supabase.auth.signInWithPassword...');
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+      console.log('[Auth] signInWithPassword resolved:', { data: !!data, error });
+
+      if (data?.session && !error) {
+        setSession(data.session);
+        const profile = await fetchUserProfile(data.user);
+        if (profile) {
+          console.log('[Auth] login redirecting to', profile.role);
+          if (profile.role === 'admin') router.push('/admin');
+          else router.push('/dashboard');
+        }
+      }
+
+      return { error };
     } catch (err: any) {
+      console.error('[Auth] signInWithPassword threw:', err);
       return { error: err };
     }
   };
