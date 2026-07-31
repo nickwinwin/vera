@@ -90,6 +90,35 @@
     max-width: 480px;
     line-height: 1.5;
   }
+  .hero-play-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    padding: 12px 24px;
+    border-radius: 50px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background .25s;
+    text-decoration: none;
+    width: fit-content;
+  }
+  .hero-play-btn:hover { background: rgba(255,255,255,0.2); }
+  .hero-play-btn .play-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+  }
 
   section { padding: 100px 72px; }
   section.dark { background: #1a1a22; color: #fff; }
@@ -496,10 +525,19 @@
     .overview-table, .overview-table colgroup { display: block; }
     .overview-table tr, .overview-table td { display: block; }
     .ot-line, .ot-connector { display: none; }
-    .ot-proj { padding-right: 0; margin-bottom: 12px; }
-    .ot-cell { margin-bottom: 16px; }
-    .ot-gap { height: 32px; }
-    nav { padding: 16px 24px; }
+    .ot-proj { padding-right: 0; margin-bottom: 8px; }
+    .ot-proj-name { font-size: 18px; }
+    .ot-cell { margin-bottom: 12px; }
+    .ot-cell .ot-inner { min-height: auto; gap: 12px; padding: 12px 16px; background: #fff; border-radius: 10px; border: 1px solid #eeede8; }
+    .ot-cat td { padding-bottom: 16px; }
+    .ot-cat-label { font-size: 10px; padding: 4px 12px; background: #eeede8; border-radius: 20px; display: inline-block; margin-bottom: 8px; }
+    .ot-gap { height: 20px; }
+    .ot-item { font-size: 14px; }
+    .ot-item a { font-size: 14px; }
+    .ot-sub-items { gap: 8px; margin-top: 8px; }
+    .hero-play-btn { margin-top: 20px; padding: 10px 20px; font-size: 12px; }
+    .hero-play-btn .play-icon { width: 28px; height: 28px; font-size: 12px; }
+    nav { padding: 16px 24px; mix-blend-mode: normal; background: rgba(26,26,34,0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); }
   }
 </style>
 </head>
@@ -523,6 +561,7 @@
     <div class="tag">HD Esthetic</div>
     <h1>Die digitale Präsenz einer Kosmetikpraxis</h1>
     <div class="sub">Omni-Channel-Inhalte, KI-Assistenz &amp; automatisierte Systeme — von der Strategie bis zur Auslieferung.</div>
+    <a href="#video" class="hero-play-btn"><span class="play-icon">▶</span> Video ansehen</a>
   </div>
 </section>
 
