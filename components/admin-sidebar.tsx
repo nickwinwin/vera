@@ -1,19 +1,21 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
-import { 
-  BarChart3, 
-  Building2, 
-  Shield, 
-  FileText, 
-  Settings, 
-  CreditCard, 
+import {
+  BarChart3,
+  Building2,
+  Shield,
+  FileText,
+  Settings,
+  CreditCard,
   LogOut,
   ChevronLeft,
   ChevronRight,
-  LayoutGrid
+  LayoutGrid,
+  Database,
 } from 'lucide-react';
 import { useState } from 'react';
 
@@ -29,20 +31,23 @@ export default function AdminSidebar() {
     { href: '/admin/documents', icon: FileText, label: 'Dokumententypen' },
     { href: '/admin/forms', icon: LayoutGrid, label: 'Formular-Templates' },
     { href: '/admin/subscriptions', icon: CreditCard, label: 'Abonnements' },
+    { href: '/admin/setup', icon: Database, label: 'Setup' },
   ];
 
   return (
     <aside className={`bg-brand-dark text-white border-r border-white/10 flex flex-col transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
       <div className="h-20 flex items-center px-6 border-b border-white/10 overflow-hidden">
-        <Shield className="w-8 h-8 text-brand-beige flex-shrink-0" />
-        {!collapsed && <span className="ml-3 text-2xl font-display font-bold tracking-tight">VERA <span className="text-[10px] bg-brand-beige text-white px-1 rounded align-top">ADMIN</span></span>}
+        <div className="w-28 h-10 relative flex-shrink-0">
+          <Image src="/img/vera-logo-full.svg" alt="VERA" fill className="object-contain object-left brightness-0 invert" />
+        </div>
+        {!collapsed && <span className="ml-auto text-[10px] bg-brand-beige text-white px-1.5 py-0.5 rounded font-bold">ADMIN</span>}
       </div>
 
       <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
-            <Link 
+            <Link
               key={item.href}
               href={item.href}
               className={`flex items-center px-3 py-3 rounded-brand transition-colors group ${isActive ? 'bg-brand-beige text-white' : 'text-brand-muted hover:bg-white/5 hover:text-white'}`}
@@ -55,7 +60,7 @@ export default function AdminSidebar() {
       </nav>
 
       <div className="p-3 border-t border-white/10">
-        <button 
+        <button
           onClick={() => setCollapsed(!collapsed)}
           className="w-full flex items-center px-3 py-3 text-brand-muted hover:bg-white/5 rounded-brand transition-colors"
         >
@@ -66,7 +71,7 @@ export default function AdminSidebar() {
             </>
           )}
         </button>
-        <button 
+        <button
           onClick={logout}
           className="w-full flex items-center px-3 py-3 text-red-400 hover:bg-red-500/10 rounded-brand transition-colors mt-1"
         >

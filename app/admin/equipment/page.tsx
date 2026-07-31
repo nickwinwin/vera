@@ -1,21 +1,47 @@
 'use client';
 
-import { useState } from 'react';
-import { 
-  Shield, 
-  Search, 
-  Filter, 
-  Plus, 
-  Edit2, 
-  Trash2, 
-  FileText,
-  CheckCircle2
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import {
+  Shield,
+  Search,
+  Filter,
+  Plus,
+  Edit2,
+  Trash2,
+  Loader2,
 } from 'lucide-react';
 import equipmentData from '@/data/equipment.json';
 import { motion } from 'motion/react';
 
 export default function AdminEquipment() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [devices, setDevices] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchDevices();
+  }, []);
+
+  const fetchDevices = async () => {
+    try {
+      const { data } = await supabase.from('devices').select('*').order('name');
+      if (data && data.length > 0) {
+        setDevices(data);
+      } else {
+        setDevices(equipmentData);
+      }
+    } catch {
+      setDevices(equipmentData);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = devices.filter((d: any) =>
+    d.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    d.manufacturer?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-8">
@@ -33,9 +59,9 @@ export default function AdminEquipment() {
         <div className="p-4 border-b border-brand-border flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted" />
-            <input 
-              type="text" 
-              placeholder="Gerät oder Hersteller suchen..." 
+            <input
+              type="text"
+              placeholder="Gerät oder Hersteller suchen..."
               className="w-full pl-10 pr-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -59,7 +85,13 @@ export default function AdminEquipment() {
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-border">
-              {equipmentData.map((device) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-brand-beige mb-2" />
+                  </td>
+                </tr>
+              ) : filtered.map((device: any) => (
                 <tr key={device.id} className="hover:bg-brand-warm-white/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -79,7 +111,7 @@ export default function AdminEquipment() {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex flex-wrap gap-1">
-                      {device.required_documents.map((doc, idx) => (
+                      {(device.required_documents || []).map((doc: string, idx: number) => (
                         <span key={idx} className="text-[9px] font-bold text-brand-muted uppercase tracking-tighter bg-white border border-brand-border px-1.5 py-0.5 rounded">
                           {doc}
                         </span>
@@ -88,10 +120,10 @@ export default function AdminEquipment() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex justify-end gap-2">
-                      <button className="p-2 hover:bg-brand-warm-white rounded-brand text-brand-beige" title="Bearbeiten">
+                      <button className="p-2 hover:bg-brand-warm-white rounded-brand text-brand-beige">
                         <Edit2 className="w-4 h-4" />
                       </button>
-                      <button className="p-2 hover:bg-red-50 rounded-brand text-brand-error" title="Löschen">
+                      <button className="p-2 hover:bg-red-50 rounded-brand text-brand-error">
                         <Trash2 className="w-4 h-4" />
                       </button>
                     </div>

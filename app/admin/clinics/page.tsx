@@ -1,47 +1,55 @@
 'use client';
 
-import { useState } from 'react';
-import { 
-  Building2, 
-  Search, 
-  Filter, 
-  MoreVertical, 
-  ExternalLink, 
-  ShieldCheck,
-  Ban,
-  Trash2
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import {
+  Building2,
+  Search,
+  Filter,
+  MoreVertical,
+  ExternalLink,
+  Loader2,
 } from 'lucide-react';
-import { motion } from 'motion/react';
 
 export default function AdminClinics() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [clinics, setClinics] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const clinics = [
-    { id: 1, name: 'Beauty Lounge Berlin', owner: 'Max Mustermann', plan: 'Professional', status: 'active', date: '12.01.2025', clients: 124 },
-    { id: 2, name: 'Skin Experts Hamburg', owner: 'Dr. Sarah Weber', plan: 'Enterprise', status: 'active', date: '05.02.2025', clients: 450 },
-    { id: 3, name: 'Pure Glow Munich', owner: 'Elena Fischer', plan: 'Basic', status: 'suspended', date: '20.02.2025', clients: 45 },
-    { id: 4, name: 'Laser Center Cologne', owner: 'Marc Wagner', plan: 'Professional', status: 'active', date: '01.03.2025', clients: 89 },
-  ];
+  useEffect(() => {
+    fetchClinics();
+  }, []);
+
+  const fetchClinics = async () => {
+    try {
+      const { data } = await supabase.from('clinics').select('*').order('created_at', { ascending: false });
+      setClinics(data || []);
+    } catch (err) {
+      console.error('Error fetching clinics:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = clinics.filter((c: any) =>
+    c.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    c.email?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-8">
-      <div className="flex justify-between items-center">
-        <div>
-          <h1 className="text-3xl font-display font-bold">Klinik-Verwaltung</h1>
-          <p className="text-brand-secondary">Verwalten Sie alle registrierten Studios und deren Status.</p>
-        </div>
-        <button className="btn-primary flex items-center gap-2">
-          <PlusIcon className="w-5 h-5" /> Neue Klinik anlegen
-        </button>
+      <div>
+        <h1 className="text-3xl font-display font-bold">Klinik-Verwaltung</h1>
+        <p className="text-brand-secondary">Verwalten Sie alle registrierten Studios und deren Status.</p>
       </div>
 
       <div className="medical-card bg-white overflow-hidden">
         <div className="p-4 border-b border-brand-border flex flex-col md:flex-row gap-4">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted" />
-            <input 
-              type="text" 
-              placeholder="Klinik oder Inhaber suchen..." 
+            <input
+              type="text"
+              placeholder="Klinik oder Inhaber suchen..."
               className="w-full pl-10 pr-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -59,15 +67,25 @@ export default function AdminClinics() {
             <thead>
               <tr className="bg-brand-warm-white border-b border-brand-border">
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Klinik</th>
-                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Inhaber</th>
-                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Plan</th>
-                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Kunden</th>
+                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">E-Mail</th>
+                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Registriert</th>
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-border">
-              {clinics.map((clinic) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-12 text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-brand-beige mb-2" />
+                  </td>
+                </tr>
+              ) : filtered.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-6 py-12 text-center text-brand-secondary">
+                    {clinics.length === 0 ? 'Keine Kliniken registriert.' : 'Keine Kliniken gefunden.'}
+                  </td>
+                </tr>
+              ) : filtered.map((clinic: any) => (
                 <tr key={clinic.id} className="hover:bg-brand-warm-white/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -75,33 +93,19 @@ export default function AdminClinics() {
                         <Building2 className="w-5 h-5" />
                       </div>
                       <div>
-                        <p className="text-sm font-bold">{clinic.name}</p>
-                        <p className="text-xs text-brand-muted">Seit {clinic.date}</p>
+                        <p className="text-sm font-bold">{clinic.name || 'Unbekannt'}</p>
+                        <p className="text-xs text-brand-muted">Slug: {clinic.slug}</p>
                       </div>
                     </div>
                   </td>
-                  <td className="px-6 py-4 text-sm font-medium">{clinic.owner}</td>
-                  <td className="px-6 py-4">
-                    <span className={`text-[10px] font-bold uppercase px-2 py-1 rounded ${clinic.plan === 'Enterprise' ? 'bg-purple-100 text-purple-700' : clinic.plan === 'Professional' ? 'bg-brand-beige/10 text-brand-beige' : 'bg-gray-100 text-gray-600'}`}>
-                      {clinic.plan}
-                    </span>
+                  <td className="px-6 py-4 text-sm text-brand-secondary">{clinic.email || '—'}</td>
+                  <td className="px-6 py-4 text-sm text-brand-secondary">
+                    {clinic.created_at ? new Date(clinic.created_at).toLocaleDateString('de-DE') : '—'}
                   </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-1">
-                      <div className={`w-2 h-2 rounded-full ${clinic.status === 'active' ? 'bg-brand-success' : 'bg-brand-error'}`} />
-                      <span className="text-xs font-medium capitalize">{clinic.status}</span>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-sm font-medium">{clinic.clients}</td>
                   <td className="px-6 py-4 text-right">
-                    <div className="flex justify-end gap-2">
-                      <button className="p-2 hover:bg-brand-warm-white rounded-brand text-brand-beige" title="Dashboard ansehen">
-                        <ExternalLink className="w-5 h-5" />
-                      </button>
-                      <button className="p-2 hover:bg-brand-warm-white rounded-brand text-brand-muted">
-                        <MoreVertical className="w-5 h-5" />
-                      </button>
-                    </div>
+                    <button className="p-2 hover:bg-brand-warm-white rounded-brand text-brand-beige">
+                      <ExternalLink className="w-5 h-5" />
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -110,14 +114,5 @@ export default function AdminClinics() {
         </div>
       </div>
     </div>
-  );
-}
-
-function PlusIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M5 12h14" />
-      <path d="M12 5v14" />
-    </svg>
   );
 }
