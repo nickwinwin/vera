@@ -24,7 +24,7 @@ export default function LandingPage() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-brand-border/30">
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/60 backdrop-blur-2xl border-b border-brand-border/20">
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
           <div className="flex justify-between h-20 items-center">
             <Link href="/" className="flex items-center gap-3 group">
@@ -69,7 +69,7 @@ export default function LandingPage() {
             className="object-cover"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/65 via-black/40 to-black/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-black/20 to-black/10" />
         </div>
 
         <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16 relative z-10 w-full pt-28 pb-32">

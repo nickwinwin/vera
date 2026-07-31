@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Bot, X, Send, Loader2, Shield } from 'lucide-react';
+import { X, Send, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -48,19 +51,17 @@ export default function DashboardChat() {
 
   return (
     <>
-      {/* Floating Button */}
       {!isOpen && (
         <motion.button
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 w-14 h-14 bg-gradient-to-br from-brand-beige to-[#B8973B] text-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl hover:scale-105 transition-all z-50"
+          className="fixed bottom-6 right-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl hover:scale-105 transition-all z-50 overflow-hidden border-2 border-white"
         >
-          <Bot className="w-7 h-7" />
+          <Image src="/img/vera_avatar.png" alt="VERA" fill className="object-cover" />
         </motion.button>
       )}
 
-      {/* Chat Window */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -70,11 +71,10 @@ export default function DashboardChat() {
             transition={{ duration: 0.2 }}
             className="fixed bottom-6 right-6 w-96 h-[500px] bg-white rounded-xl shadow-2xl border border-brand-border flex flex-col z-50 overflow-hidden"
           >
-            {/* Header */}
             <div className="bg-brand-dark px-5 py-4 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-brand-beige rounded-full flex items-center justify-center">
-                  <Shield className="w-5 h-5 text-white" />
+                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+                  <Image src="/img/vera_avatar.png" alt="VERA" width={36} height={36} className="object-cover w-full h-full" />
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm">VERA Assistent</p>
@@ -86,7 +86,6 @@ export default function DashboardChat() {
               </button>
             </div>
 
-            {/* Messages */}
             <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 bg-brand-warm-white">
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
@@ -97,7 +96,13 @@ export default function DashboardChat() {
                         : 'bg-white text-brand-dark border border-brand-border rounded-bl-none shadow-sm'
                     }`}
                   >
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <div className="prose prose-sm max-w-none prose-headings:text-brand-dark prose-headings:font-semibold prose-headings:mt-4 prose-headings:mb-2 prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 prose-strong:text-brand-dark prose-code:bg-brand-warm-white prose-code:px-1 prose-code:rounded prose-code:text-xs">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}
@@ -111,7 +116,6 @@ export default function DashboardChat() {
               <div ref={messagesEndRef} />
             </div>
 
-            {/* Input */}
             <div className="border-t border-brand-border px-4 py-3 flex-shrink-0 bg-white">
               <div className="flex items-center gap-2">
                 <input

@@ -1,8 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { MessageCircle, X, Send, Loader2 } from 'lucide-react';
+import { X, Send, Loader2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import Image from 'next/image';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 interface Message {
   role: 'user' | 'assistant';
@@ -53,9 +56,9 @@ export default function PublicChat() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 left-6 w-14 h-14 bg-brand-beige text-white rounded-full shadow-lg flex items-center justify-center hover:shadow-xl hover:scale-105 transition-all z-50"
+          className="fixed bottom-6 left-6 w-14 h-14 rounded-full shadow-lg flex items-center justify-center hover:shadow-xl hover:scale-105 transition-all z-50 overflow-hidden border-2 border-white"
         >
-          <MessageCircle className="w-7 h-7" />
+          <Image src="/img/vera_avatar.png" alt="VERA" fill className="object-cover" />
         </motion.button>
       )}
 
@@ -70,8 +73,8 @@ export default function PublicChat() {
           >
             <div className="bg-brand-dark px-5 py-4 flex items-center justify-between flex-shrink-0">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 bg-brand-beige rounded-full flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-white" />
+                <div className="w-9 h-9 rounded-full overflow-hidden flex-shrink-0">
+                  <Image src="/img/vera_avatar.png" alt="VERA" width={36} height={36} className="object-cover w-full h-full" />
                 </div>
                 <div>
                   <p className="text-white font-semibold text-sm">VERA Support</p>
@@ -98,7 +101,13 @@ export default function PublicChat() {
                         : 'bg-white text-brand-dark border border-brand-border rounded-bl-none shadow-sm'
                     }`}
                   >
-                    {msg.content}
+                    {msg.role === 'assistant' ? (
+                      <div className="prose prose-sm max-w-none prose-headings:text-brand-dark prose-headings:font-semibold prose-headings:mt-4 prose-headings:mb-2 prose-p:my-1 prose-ul:my-1 prose-li:my-0.5 prose-strong:text-brand-dark prose-code:bg-brand-warm-white prose-code:px-1 prose-code:rounded prose-code:text-xs">
+                        <ReactMarkdown remarkPlugins={[remarkGfm]}>{msg.content}</ReactMarkdown>
+                      </div>
+                    ) : (
+                      msg.content
+                    )}
                   </div>
                 </div>
               ))}
