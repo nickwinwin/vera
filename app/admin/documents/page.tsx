@@ -1,34 +1,57 @@
-'use client';
+﻿'use client';
 
-import { useState } from 'react';
-import { 
-  FileText, 
-  Plus, 
-  Search, 
-  Edit2, 
-  Trash2, 
+import { useState, useEffect } from 'react';
+import { supabase } from '@/lib/supabase';
+import {
+  FileText,
+  Plus,
+  Search,
+  Edit2,
+  Trash2,
   CheckCircle2,
-  AlertCircle
+  Loader2,
 } from 'lucide-react';
-import { motion } from 'motion/react';
 
 export default function AdminDocuments() {
   const [searchTerm, setSearchTerm] = useState('');
+  const [docTypes, setDocTypes] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const docTypes = [
-    { id: 1, name: 'Fachkundenachweis', category: 'NiSV-Qualifikation', requiredFor: 'Laser, IPL, RF', status: 'active' },
-    { id: 2, name: 'Gefährdungsbeurteilung', category: 'Arbeitsschutz', requiredFor: 'Alle Geräte', status: 'active' },
-    { id: 3, name: 'Anlagenbuch', category: 'Dokumentation', requiredFor: 'NiSV-Geräte', status: 'active' },
-    { id: 4, name: 'Wartungsprotokoll', category: 'Instandhaltung', requiredFor: 'Alle Geräte', status: 'active' },
-    { id: 5, name: 'Laserschutzbeauftragter', category: 'Sicherheit', requiredFor: 'Klasse 3B & 4 Laser', status: 'active' },
-  ];
+  useEffect(() => {
+    fetchDocTypes();
+  }, []);
+
+  const fetchDocTypes = async () => {
+    try {
+      const { data } = await supabase.from('document_types').select('*').order('name');
+      if (data && data.length > 0) {
+        setDocTypes(data);
+      } else {
+        setDocTypes([
+          { id: 1, name: 'Fachkundenachweis', category: 'NiSV-Qualifikation', required_for: 'Laser, IPL, RF', status: 'active' },
+          { id: 2, name: 'Gef├ñhrdungsbeurteilung', category: 'Arbeitsschutz', required_for: 'Alle Ger├ñte', status: 'active' },
+          { id: 3, name: 'Anlagenbuch', category: 'Dokumentation', required_for: 'NiSV-Ger├ñte', status: 'active' },
+          { id: 4, name: 'Wartungsprotokoll', category: 'Instandhaltung', required_for: 'Alle Ger├ñte', status: 'active' },
+          { id: 5, name: 'Laserschutzbeauftragter', category: 'Sicherheit', required_for: 'Klasse 3B & 4 Laser', status: 'active' },
+        ]);
+      }
+    } catch {
+      setDocTypes([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const filtered = docTypes.filter((d: any) =>
+    d.name?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-8">
       <div className="flex justify-between items-center">
         <div>
           <h1 className="text-3xl font-display font-bold">Dokumententypen</h1>
-          <p className="text-brand-secondary">Definieren Sie die erforderlichen Dokumente pro Gerätekategorie.</p>
+          <p className="text-brand-secondary">Definieren Sie die erforderlichen Dokumente pro Ger├ñtekategorie.</p>
         </div>
         <button className="btn-primary flex items-center gap-2">
           <Plus className="w-5 h-5" /> Neuen Typ anlegen
@@ -39,9 +62,9 @@ export default function AdminDocuments() {
         <div className="p-4 border-b border-brand-border">
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-brand-muted" />
-            <input 
-              type="text" 
-              placeholder="Dokumententyp suchen..." 
+            <input
+              type="text"
+              placeholder="Dokumententyp suchen..."
               className="w-full pl-10 pr-4 py-2 bg-brand-warm-white border border-brand-border rounded-brand focus:outline-none focus:border-brand-beige text-sm"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -55,13 +78,19 @@ export default function AdminDocuments() {
               <tr className="bg-brand-warm-white border-b border-brand-border">
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Name</th>
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Kategorie</th>
-                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Erforderlich für</th>
+                <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Erforderlich f├╝r</th>
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider">Status</th>
                 <th className="px-6 py-4 text-xs font-bold text-brand-muted uppercase tracking-wider text-right">Aktionen</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-brand-border">
-              {docTypes.map((doc) => (
+              {loading ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-12 text-center">
+                    <Loader2 className="w-8 h-8 animate-spin mx-auto text-brand-beige mb-2" />
+                  </td>
+                </tr>
+              ) : filtered.map((doc: any) => (
                 <tr key={doc.id} className="hover:bg-brand-warm-white/50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -70,7 +99,7 @@ export default function AdminDocuments() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-sm text-brand-secondary">{doc.category}</td>
-                  <td className="px-6 py-4 text-sm text-brand-secondary">{doc.requiredFor}</td>
+                  <td className="px-6 py-4 text-sm text-brand-secondary">{doc.required_for}</td>
                   <td className="px-6 py-4">
                     <span className="inline-flex items-center gap-1 text-xs font-bold text-brand-success uppercase">
                       <CheckCircle2 className="w-3 h-3" /> {doc.status}

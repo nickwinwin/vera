@@ -1,0 +1,937 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HD Esthetic — Deliverables</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', -apple-system, sans-serif;
+    background: #f8f7f4;
+    color: #1a1a22;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 20px 48px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    mix-blend-mode: difference;
+    color: #fff;
+  }
+  nav a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    transition: opacity .2s;
+  }
+  nav a:hover { opacity: 1; }
+
+  .hero {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+    background: #1a1a22;
+  }
+  .hero iframe {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 100vw;
+    height: 56.25vw;
+    min-height: 100vh;
+    min-width: 177.77vh;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.15) 50%, rgba(0,0,0,0.4) 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 80px 72px;
+  }
+  .hero-overlay .tag {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 16px;
+  }
+  .hero-overlay h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 56px;
+    font-weight: 500;
+    color: #fff;
+    line-height: 1.15;
+    max-width: 680px;
+    letter-spacing: -0.02em;
+  }
+  .hero-overlay .sub {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.65);
+    margin-top: 20px;
+    max-width: 480px;
+    line-height: 1.5;
+  }
+
+  section { padding: 100px 72px; }
+  section.dark { background: #1a1a22; color: #fff; }
+  section.light { background: #ffffff; }
+  section.cream { background: #f8f7f4; }
+  .section-inner {
+    max-width: 1120px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: #9898a8;
+    margin-bottom: 28px;
+  }
+  .section-label.light { color: rgba(255,255,255,0.4); }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 28px;
+  }
+  h2.light { color: #fff; }
+
+  /* ── Brief Letter ── */
+  .brief {
+    max-width: 680px;
+  }
+  .brief .salutation {
+    font-size: 18px;
+    font-weight: 500;
+    color: #5a66d6;
+    margin-bottom: 28px;
+  }
+  .brief p {
+    font-size: 15.5px;
+    font-weight: 400;
+    line-height: 1.7;
+    color: #3a3a44;
+    margin-bottom: 20px;
+  }
+  .brief .signoff {
+    margin-top: 40px;
+    padding-top: 28px;
+    border-top: 1px solid #e8e7e2;
+  }
+  .brief .signoff .name {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a22;
+  }
+  .brief .signoff .role {
+    font-size: 13px;
+    color: #9898a8;
+    margin-top: 2px;
+  }
+
+  /* ── Video Section ── */
+  .video-section {
+    margin-top: 20px;
+  }
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #1a1a22;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08);
+  }
+  .video-wrapper iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: 0;
+  }
+
+  /* ── Overview Table ── */
+  .overview-table { width: 100%; border-collapse: separate; border-spacing: 0; margin-top: 36px; }
+  .overview-table td, .overview-table th { padding: 0; vertical-align: top; }
+  .ot-cat td { padding-bottom: 36px; }
+  .ot-cat-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: #7a7a8a;
+    padding-bottom: 4px;
+  }
+  .ot-line { width: 72px; position: relative; }
+  .ot-line .vl { position: absolute; left: 50%; width: 1.5px; background: #d8d7d2; top: 0; bottom: 0; }
+  .ot-line .dot { position: absolute; left: 50%; top: 50%; width: 8px; height: 8px; background: #c8c7c2; border-radius: 50%; transform: translate(-50%, -50%); }
+  .ot-connector { position: relative; width: 36px; }
+  .ot-connector .hl { position: absolute; top: 50%; left: 0; right: 0; height: 1.5px; background: #d8d7d2; }
+  .ot-proj { padding-right: 56px; }
+  .ot-proj-name { font-size: 22px; font-weight: 700; color: #1a1a22; line-height: 1.3; margin-bottom: 4px; }
+  .ot-cell { padding-right: 0; }
+  .ot-inner { display: flex; flex-direction: column; gap: 20px; min-height: 72px; justify-content: center; }
+  .ot-item { font-size: 16px; font-weight: 400; color: #3a3a44; line-height: 1.5; }
+  .ot-item a { color: #5a66d6; text-decoration: none; font-weight: 500; border-bottom: 1px solid transparent; transition: border-color .2s; font-size: 16px; }
+  .ot-item a:hover { border-color: #5a66d6; }
+  .ot-item .sub { font-size: 14px; color: #9898a8; font-weight: 400; margin-left: 6px; }
+  .ot-item .badge {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 500;
+    color: #5a5a6a;
+    background: #eeede8;
+    padding: 8px 24px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    cursor: default;
+    position: relative;
+    transition: background .15s;
+    text-decoration: none;
+    border-bottom: none;
+  }
+  .ot-item a.badge:hover { border-bottom: none; color: #5a5a6a; }
+  .ot-item .badge.previewable:hover { background: #e0dfda; }
+  .ot-section-label { font-size: 14px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #5a5a6a; line-height: 1.3; }
+  .ot-sub-items { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+  .ot-sparkle { color: #d4a017; margin-right: 5px; font-size: 16px; }
+  .ot-gap { height: 72px; }
+  .ot-empty { color: #c8c7c2; }
+
+  /* ── Work Delivered (experimental) ── */
+  .metrics-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .metric-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px 28px;
+    border: 1px solid #eeede8;
+    text-align: center;
+  }
+  .metric-card .number {
+    font-size: 42px;
+    font-weight: 700;
+    color: #1a1a22;
+    line-height: 1;
+    letter-spacing: -0.03em;
+  }
+  .metric-card .number .accent { color: #5a66d6; }
+  .metric-card .label {
+    font-size: 12px;
+    font-weight: 500;
+    color: #9898a8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-top: 10px;
+  }
+  .metric-card .sublabel {
+    font-size: 12px;
+    color: #c8c7c2;
+    margin-top: 4px;
+  }
+
+  .timeline {
+    margin-top: 56px;
+  }
+  .timeline h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a22;
+    margin-bottom: 24px;
+  }
+  .timeline-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 16px 0;
+    border-bottom: 1px solid #eeede8;
+  }
+  .timeline-row:last-child { border-bottom: none; }
+  .tl-month {
+    font-size: 12px;
+    font-weight: 600;
+    color: #9898a8;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    min-width: 100px;
+    padding-top: 2px;
+  }
+  .tl-items {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .tl-item {
+    font-size: 14px;
+    color: #3a3a44;
+    line-height: 1.5;
+  }
+  .tl-item .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    color: #6a6a7a;
+    background: #f0efeb;
+    padding: 1px 10px;
+    border-radius: 100px;
+    letter-spacing: 0.04em;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+
+  .breakdown {
+    margin-top: 56px;
+  }
+  .breakdown h3 {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a22;
+    margin-bottom: 24px;
+  }
+  .breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  .b-item {
+    background: #fff;
+    border: 1px solid #eeede8;
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .b-item .count {
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a22;
+    line-height: 1;
+  }
+  .b-item .desc {
+    font-size: 13px;
+    color: #5a5a64;
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .b-item .chan {
+    display: inline-block;
+    font-size: 9px;
+    font-weight: 500;
+    color: #9898a8;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+  }
+
+  /* preview tooltip */
+  .preview-tooltip {
+    position: fixed;
+    z-index: 9999;
+    width: 300px;
+    height: 200px;
+    border-radius: 12px;
+    box-shadow: 0 12px 48px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.06);
+    background: #fff;
+    overflow: hidden;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .15s;
+    transform: translate(16px, -50%);
+  }
+  .preview-tooltip.visible { opacity: 1; }
+  .preview-tooltip img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .preview-tooltip .fallback {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #9898a8;
+    font-size: 12px;
+    background: #f5f4f0;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
+    margin-top: 40px;
+  }
+  .content-card {
+    background: #fff;
+    border-radius: 16px;
+    padding: 36px;
+    border: 1px solid #eeede8;
+    transition: box-shadow .2s, border-color .2s;
+  }
+  .content-card:hover { border-color: #d8d7d2; box-shadow: 0 4px 24px rgba(0,0,0,0.04); }
+  .content-card .icon { font-size: 28px; margin-bottom: 16px; display: block; }
+  .content-card h3 {
+    font-size: 17px;
+    font-weight: 600;
+    color: #1a1a22;
+    margin-bottom: 8px;
+  }
+  .content-card p {
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: #5a5a64;
+  }
+  .content-card a {
+    color: #5a66d6;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s;
+  }
+  .content-card a:hover { border-color: #5a66d6; }
+
+  .ai-showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-top: 48px;
+  }
+  .ai-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 16px;
+    padding: 40px;
+    backdrop-filter: blur(4px);
+  }
+  .ai-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    margin-bottom: 10px;
+  }
+  .ai-card p {
+    font-size: 14.5px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.7);
+  }
+  .ai-card .tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+    color: rgba(255,255,255,0.4);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .ai-card a {
+    color: #8a96ff;
+    text-decoration: none;
+    font-weight: 500;
+    border-bottom: 1px solid transparent;
+    transition: border-color .2s;
+  }
+  .ai-card a:hover { border-color: #8a96ff; }
+
+  .infra-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 28px;
+    margin-top: 48px;
+  }
+  .infra-item {
+    padding: 28px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid #eeede8;
+  }
+  .infra-item h4 {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #6a6a7a;
+    margin-bottom: 8px;
+  }
+  .infra-item p {
+    font-size: 13px;
+    line-height: 1.5;
+    color: #5a5a64;
+  }
+
+  footer {
+    text-align: center;
+    padding: 48px 72px 56px;
+    font-size: 12px;
+    color: #9898a8;
+    letter-spacing: 0.05em;
+  }
+  footer strong { color: #5a5a64; font-weight: 500; }
+
+  @media (max-width: 900px) {
+    section { padding: 56px 28px; }
+    .hero-overlay { padding: 40px 28px; }
+    .hero-overlay h1 { font-size: 36px; }
+    .content-grid, .ai-showcase, .infra-grid, .metrics-grid, .breakdown-grid { grid-template-columns: 1fr; }
+    .overview-table, .overview-table colgroup { display: block; }
+    .overview-table tr, .overview-table td { display: block; }
+    .ot-line, .ot-connector { display: none; }
+    .ot-proj { padding-right: 0; margin-bottom: 12px; }
+    .ot-cell { margin-bottom: 16px; }
+    .ot-gap { height: 32px; }
+    nav { padding: 16px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <span>HD Esthetic</span>
+  <a href="#status">Status</a>
+  <a href="#video">Video</a>
+  <a href="#ubersicht">Übersicht</a>
+  <a href="#content">Inhalte</a>
+  <a href="#ki">KI</a>
+</nav>
+
+<!-- ════════════════════════════════════════ -->
+<!--  HERO                                    -->
+<!-- ════════════════════════════════════════ -->
+<section class="hero">
+  <iframe src="https://www.youtube.com/embed/eqqLSqHgoYI?autoplay=1&mute=1&loop=1&playlist=eqqLSqHgoYI&controls=0&showinfo=0&rel=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+  <div class="hero-overlay">
+    <div class="tag">HD Esthetic</div>
+    <h1>Die digitale Präsenz einer Kosmetikpraxis</h1>
+    <div class="sub">Omni-Channel-Inhalte, KI-Assistenz &amp; automatisierte Systeme — von der Strategie bis zur Auslieferung.</div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  STATUS                                   -->
+<!-- ════════════════════════════════════════ -->
+<section class="cream" id="status">
+  <div class="section-inner">
+    <div class="section-label">Status</div>
+    <div class="brief">
+      <div class="salutation">Liebe Natalia,</div>
+      <p>
+        das System ist live. Nach Wochen der Entwicklung, Redaktion und Integration läuft
+        deine digitale Plattform — bereit, von dir gesteuert zu werden.
+      </p>
+      <p>
+        Im Folgenden siehst du, was entstanden ist: jede Website, jeder Kanal, jeder Inhalt.
+        Und das Wichtigste: Du kannst ab sofort alles selbst steuern.
+      </p>
+      <p>
+        Änderungen an Texten, Bildern oder Beiträgen gibst du einfach per Chat an Leia weiter —
+        oder sprichst sie per Sprachaufzeichnung ein. Leia setzt deine Wünsche direkt um.
+      </p>
+      <p>
+        Stell dir vor: Du hast eine Idee für einen Instagram-Post, sprichst es Leia —
+        und der Entwurf liegt am nächsten Morgen zur Freigabe bereit.
+      </p>
+      <p>
+        Dieses Dokument fasst zusammen, was entstanden ist. Jeder Link führt zu dem Ort, an dem es lebt.
+      </p>
+      <div class="signoff">
+        <div class="name">Alberd</div>
+        <div class="role">Holoway Enterprise</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  VIDEO (klickbar)                         -->
+<!-- ════════════════════════════════════════ -->
+<section class="light" id="video">
+  <div class="section-inner">
+    <div class="section-label">Hero Video</div>
+    <h2>Das HD Esthetic Studio</h2>
+    <div class="video-section">
+      <div class="video-wrapper">
+        <iframe src="https://www.youtube.com/embed/eqqLSqHgoYI?rel=0&showinfo=0" frameborder="0" allow="autoplay; fullscreen" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  ÜBERSICHT                                -->
+<!-- ════════════════════════════════════════ -->
+<section class="cream" id="ubersicht">
+  <div class="section-inner">
+    <div class="section-label">Übersicht</div>
+    <h2>Der ganze Umfang auf einen Blick</h2>
+
+    <table class="overview-table">
+      <colgroup>
+        <col style="width:12%"><col style="width:3%"><col style="width:16%">
+        <col style="width:6%"><col style="width:26%"><col style="width:6%">
+        <col style="width:18%"><col style="width:6%"><col style="width:13%">
+      </colgroup>
+      <tr class="ot-cat">
+        <td></td><td></td>
+        <td class="ot-cat-label">Web</td><td></td>
+        <td class="ot-cat-label">Marketing</td><td></td>
+        <td class="ot-cat-label"><span class="ot-sparkle">&#9733;</span> KI</td><td></td>
+        <td class="ot-cat-label">Sales</td>
+      </tr>
+
+      <!-- HD Esthetic -->
+      <tr>
+        <td class="ot-proj">
+          <div class="ot-proj-name">HD Esthetic</div>
+        </td>
+        <td class="ot-connector"><div class="hl"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item"><a href="https://hd-esthetic.com" target="_blank">Web</a> <span class="sub">&rarr; hd-esthetic.com</span></div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-section-label">Omni Channel Inhalte</div>
+            <div class="ot-sub-items">
+              <span class="ot-item"><a href="https://space-hd.up.railway.app/ventures/holoway-enterprise/client/hd-esthetic/documents" target="_blank" class="badge previewable" data-preview="/img/HD_BLOG_PREVIEW.png">Blog</a></span>
+              <span class="ot-item"><a href="https://space-hd.up.railway.app/ventures/holoway-enterprise/client/hd-esthetic/documents" target="_blank" class="badge previewable" data-preview="/img/HD_Instagram.png">Instagram</a></span>
+              <span class="ot-item"><a href="https://space-hd.up.railway.app/ventures/holoway-enterprise/client/hd-esthetic/documents" target="_blank" class="badge">E&#8209;Mail</a></span>
+              <span class="ot-item"><span class="badge">Video</span></span>
+            </div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item"><a href="https://hd-esthetic.com" target="_blank"><span class="ot-sparkle">&#9733;</span> Natalia KI</a></div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item"><a href="/deliverables/hd-esthetic/reactivation.html" target="_blank">E&#8209;Mails</a> <span class="sub">&rarr; Reaktivierung</span></div>
+          </div>
+        </td>
+      </tr>
+
+      <tr><td class="ot-gap" colspan="9"></td></tr>
+
+      <!-- VERA -->
+      <tr>
+        <td class="ot-proj">
+          <div class="ot-proj-name">VERA</div>
+        </td>
+        <td class="ot-connector"><div class="hl"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item"><a href="https://vera-app-pi.vercel.app" target="_blank">Studio</a> <span class="sub">&rarr; vera-app</span></div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-section-label">Omni Channel Inhalte</div>
+            <div class="ot-sub-items">
+              <span class="ot-item"><a href="https://vera-app-pi.vercel.app/blog" target="_blank" class="badge previewable" data-preview="/img/VERA_BLOG_PREVIEW.png">Blog</a></span>
+              <span class="ot-item"><span class="badge previewable" data-preview="/img/Vera_instagram_preview.png">Instagram</span></span>
+              <span class="ot-item"><span class="badge">E&#8209;Mail</span></span>
+            </div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item"><span class="ot-sparkle">&#9733;</span> VERA KI Client</div>
+            <div class="ot-item"><span class="ot-sparkle">&#9733;</span> VERA KI Dashboard</div>
+          </div>
+        </td>
+        <td class="ot-line"><div class="vl"></div><div class="dot"></div></td>
+        <td class="ot-cell">
+          <div class="ot-inner">
+            <div class="ot-item ot-empty">&mdash;</div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- ═══ Experimental: Work Volume Dashboard ═══ -->
+    <div class="timeline">
+      <h3>Auslieferungsverlauf</h3>
+      <div class="timeline-row">
+        <div class="tl-items">
+          <div class="tl-item"><span class="tag">Blog</span> NiSV-Fachkunde 2026 — Aquafacial vs. Microneedling</div>
+          <div class="tl-item"><span class="tag">Instagram</span> Anti-Aging Karussell — Rosacea Trigger</div>
+          <div class="tl-item"><span class="tag">E-Mail</span> Weekly Digest KW 31</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-items">
+          <div class="tl-item"><span class="tag">Blog</span> Rosacea-Behandlung verstehen — Anti-Aging-Guide</div>
+          <div class="tl-item"><span class="tag">Instagram</span> NiSV-Karussell — Vorher-Nachher Story</div>
+          <div class="tl-item"><span class="tag">E-Mail</span> Welcome-Serie Teil 1–3</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-items">
+          <div class="tl-item"><span class="tag">Blog</span> Aquafacial vs. Microneedling — Vergleichsguide</div>
+          <div class="tl-item"><span class="tag">Instagram</span> Behandlungserklärung Reel</div>
+          <div class="tl-item"><span class="tag">Video</span> Hero-Video — Studio Impressionen</div>
+        </div>
+      </div>
+      <div class="timeline-row">
+        <div class="tl-items">
+          <div class="tl-item"><span class="tag">Blog</span> NiSV-Fachkunde 2026 aktualisiert</div>
+          <div class="tl-item"><span class="tag">Instagram</span> Anti-Aging Karussell Pt. 2</div>
+          <div class="tl-item"><span class="tag">E-Mail</span> Weekly Digest KW 33</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="breakdown">
+      <h3>Was erstellt wurde und live läuft</h3>
+      <div class="breakdown-grid">
+        <div class="b-item">
+          <div class="chan">Text</div>
+          <div class="count">18</div>
+          <div class="desc">Blogartikel, Instagram-Texte, E-Mail-Serien, SEO-Metadaten</div>
+        </div>
+        <div class="b-item">
+          <div class="chan">Design</div>
+          <div class="count">14</div>
+          <div class="desc">Instagram-Karusell-Designs, Moodboards, Marken-Assets, Preview-Grafiken</div>
+        </div>
+        <div class="b-item">
+          <div class="chan">Strategie</div>
+          <div class="count">6</div>
+          <div class="desc">Redaktionsplan, Content-Strategie, Kanal-Audit, Brand-DNA-Dokumentation</div>
+        </div>
+        <div class="b-item">
+          <div class="chan">KI-Training</div>
+          <div class="count">4</div>
+          <div class="desc">Natalia Wissensbasis, Tonalität, Behandlungsdatenbank, FAQ-Struktur</div>
+        </div>
+        <div class="b-item">
+          <div class="chan">Video</div>
+          <div class="count">2</div>
+          <div class="desc">Hero-Video, Instagram-Reel-Format (editiert, vertont)</div>
+        </div>
+        <div class="b-item">
+          <div class="chan">Pipeline</div>
+          <div class="count">1</div>
+          <div class="desc">Automatisierter Redaktions-Workflow, Channel-Integration, Sync-System</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  INHALTE                                  -->
+<!-- ════════════════════════════════════════ -->
+<section class="light" id="content">
+  <div class="section-inner">
+    <div class="section-label">Inhalte</div>
+    <h2>Redaktionelle Arbeit &amp; Auslieferung</h2>
+    <p style="font-size:15px;line-height:1.6;color:#5a5a64;max-width:640px;">
+      Jeder Kanal wird aus einer zentralen Strategie bespielt — mit eigenen Formaten,
+      eigener Tonalität und einem wiederkehrenden Rhythmus.
+    </p>
+
+    <div class="content-grid">
+      <div class="content-card">
+        <span class="icon">&#9998;</span>
+        <h3>Blog</h3>
+        <p>Fachartikel zu NiSV-Fachkunde, Aquafacial vs. Microneedling, Rosacea-Behandlung und Anti-Aging — für Google und als Kompetenznachweis.</p>
+      </div>
+      <div class="content-card">
+        <span class="icon">&#9654;</span>
+        <h3>Video</h3>
+        <p>Hero-Video für die Studio-Präsenz sowie Instagram-Reels-Formate zur Behandlungserklärung und persönlichen Vorstellung.</p>
+      </div>
+      <div class="content-card">
+        <span class="icon">&#9670;</span>
+        <h3>Instagram</h3>
+        <p>Karussell-Posts zu Anti-Aging &amp; Rosacea, ästhetische Vorher-Nachher-Darstellungen und wöchentliche Story-Formate.</p>
+      </div>
+      <div class="content-card">
+        <span class="icon">&#9993;</span>
+        <h3>E-Mail</h3>
+        <p>Willkommensserie für Neukunden, wöchentlicher Digest mit Behandlungstipps und saisonale Kampagnen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  KI                                       -->
+<!-- ════════════════════════════════════════ -->
+<section class="dark" id="ki">
+  <div class="section-inner">
+    <div class="section-label light">&#9733; Künstliche Intelligenz</div>
+    <h2 class="light">Natalia — deine digitale Assistentin</h2>
+    <p style="font-size:15px;line-height:1.7;color:rgba(255,255,255,0.7);max-width:640px;">
+      Natalia kennt HD Esthetic, beantwortet Kundenfragen in deinem Ton und arbeitet rund um die Uhr.
+    </p>
+    <div class="ai-showcase">
+      <div class="ai-card">
+        <div class="tag">Kundenkommunikation</div>
+        <h3>Natalia im Chat</h3>
+        <p>Beantwortet Fragen zu Behandlungen, Preisen und Verfügbarkeit direkt auf der Website — mit Zugriff auf dein vollständiges Wissen.</p>
+      </div>
+      <div class="ai-card">
+        <div class="tag">Terminbuchung</div>
+        <h3>Natalia bucht Termine</h3>
+        <p>Nach der Beratung leitet Natalia nahtlos an <a href="#" target="_blank">Treatwell</a> weiter — ohne überzusteuern, ohne falsche Versprechen.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  INFRASTRUKTUR                            -->
+<!-- ════════════════════════════════════════ -->
+<section class="light" id="infra">
+  <div class="section-inner">
+    <div class="section-label">Infrastruktur</div>
+    <h2>Was im Hintergrund läuft</h2>
+    <p style="font-size:15px;line-height:1.6;color:#5a5a64;max-width:640px;margin-bottom:8px;">
+      Technische Systeme, die ohne dein Zutun arbeiten — entwickelt für Zuverlässigkeit und Skalierung.
+    </p>
+    <div class="infra-grid">
+      <div class="infra-item">
+        <h4>Channel Integration</h4>
+        <p>Telegram, WhatsApp &amp; E-Mail — ein zentraler Empfänger für alle Nachrichten, verbunden mit Natalia.</p>
+      </div>
+      <div class="infra-item">
+        <h4>Content Pipeline</h4>
+        <p>Vom Redaktionsplan zur Auslieferung: geplante Posts, automatische Vorschauen und Queue-Verwaltung.</p>
+      </div>
+      <div class="infra-item">
+        <h4>Sync &amp; Volume</h4>
+        <p>Alle Daten liegen auf einem verschlüsselten Volume — live auf dem Server.</p>
+      </div>
+      <div class="infra-item">
+        <h4>Knowledge Base</h4>
+        <p>Brand-DNA, Behandlungsdatenbank, Kundenstimmen — strukturiert und von Natalia abrufbar.</p>
+      </div>
+      <div class="infra-item">
+        <h4>Analytics</h4>
+        <p>Übersicht über ausgelieferte Inhalte, Kanal-Reichweite und Interaktionen.</p>
+      </div>
+      <div class="infra-item">
+        <h4>Sicherheit</h4>
+        <p>Verschlüsselte Zugänge, RLS-Datenbank, keine Speicherung von Klartext-Passwörtern.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════ -->
+<!--  BRIEF VON ALBERD                        -->
+<!-- ════════════════════════════════════════ -->
+<section class="cream" id="brief">
+  <div class="section-inner">
+    <div class="section-label">Brief</div>
+    <div class="brief">
+      <div class="salutation">Liebe Natalia,</div>
+      <p>
+        Was als ein Gespräch über Sichtbarkeit begann, hat sich zu einem Entwurf entwickelt —
+        durch den deine Praxis nicht mehr nur gefunden wird, sondern selbstbewusst kommuniziert.
+      </p>
+      <p>
+        Für HD Esthetic ist eine Grundlage entstanden: eine Webpräsenz, die deine
+        Philosophie trägt; ein Redaktionsfluss für Blog, Instagram und E-Mail; eine
+        KI-Assistentin, die deine Sprache spricht — und eine technische Basis, die rund um die Uhr
+        für dich arbeiten kann. Alles bereit für deine Freigabe und Feinschliff.
+      </p>
+      <div class="signoff">
+        <div class="name">Alberd</div>
+        <div class="role">Holoway Enterprise</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <strong>HD Esthetic</strong> &nbsp;·&nbsp; delivered by Holoway Enterprise &nbsp;·&nbsp; 2026
+</footer>
+
+<div class="preview-tooltip" id="previewTooltip">
+  <img id="previewImg" src="" alt="preview">
+  <div class="fallback" id="previewFallback">Preview not available</div>
+</div>
+
+<script>
+(function() {
+  var tip = document.getElementById('previewTooltip');
+  var img = document.getElementById('previewImg');
+  var fb = document.getElementById('previewFallback');
+  var active = false;
+
+  document.querySelectorAll('.badge.previewable').forEach(function(el) {
+    el.addEventListener('mouseenter', function(e) {
+      var src = el.getAttribute('data-preview');
+      if (!src) return;
+      active = true;
+      img.style.display = 'none';
+      fb.style.display = 'none';
+      img.onload = function() {
+        if (!active) return;
+        img.style.display = 'block';
+        fb.style.display = 'none';
+        tip.classList.add('visible');
+      };
+      img.onerror = function() {
+        if (!active) return;
+        img.style.display = 'none';
+        fb.style.display = 'flex';
+        fb.textContent = 'Image not found: ' + src.split('/').pop();
+        tip.classList.add('visible');
+      };
+      img.src = src;
+      positionTip(e);
+    });
+    el.addEventListener('mousemove', function(e) {
+      if (active) positionTip(e);
+    });
+    el.addEventListener('mouseleave', function() {
+      active = false;
+      tip.classList.remove('visible');
+    });
+  });
+
+  function positionTip(e) {
+    var x = e.clientX + 16;
+    var y = e.clientY;
+    var w = 300, h = 200;
+    if (x + w > window.innerWidth - 16) x = e.clientX - 16 - w;
+    if (y + h / 2 > window.innerHeight - 16) y = window.innerHeight - 16 - h / 2;
+    if (y - h / 2 < 16) y = 16 + h / 2;
+    tip.style.left = x + 'px';
+    tip.style.top = y + 'px';
+  }
+})();
+</script>
+</body>
+</html>
