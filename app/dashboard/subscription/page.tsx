@@ -56,7 +56,7 @@ export default function SubscriptionPage() {
       </div>
 
       {/* Current Plan Banner */}
-      <div className="medical-card bg-brand-dark text-white p-8 flex flex-col md:flex-row justify-between items-center gap-6">
+      <div className="bg-brand-dark text-white p-8 rounded-brand shadow-brand flex flex-col md:flex-row justify-between items-center gap-6">
         <div className="flex items-center gap-6">
           <div className="w-16 h-16 bg-brand-beige rounded-full flex items-center justify-center text-white">
             <Zap className="w-8 h-8" />

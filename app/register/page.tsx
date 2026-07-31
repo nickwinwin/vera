@@ -35,33 +35,42 @@ export default function RegisterPage() {
       return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-    });
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: formData.email,
+        password: formData.password,
+      });
 
-    if (signUpError) {
-      setError(signUpError.message);
+      if (signUpError) {
+        setError(signUpError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (!data.user) {
+        setError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+        setLoading(false);
+        return;
+      }
+
+      const defaultSlug = formData.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
+      await supabase.from('clinics').insert({
+        name: formData.clinicName || 'Meine Klinik',
+        slug: `${defaultSlug}-${Math.random().toString(36).substring(2, 5)}`,
+        owner_id: data.user.id,
+        email: formData.email,
+      });
+
+      setRegistered(true);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
+      } else {
+        setError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      }
+    } finally {
       setLoading(false);
-      return;
     }
-
-    if (!data.user) {
-      setError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
-      setLoading(false);
-      return;
-    }
-
-    const defaultSlug = formData.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
-    await supabase.from('clinics').insert({
-      name: formData.clinicName || 'Meine Klinik',
-      slug: `${defaultSlug}-${Math.random().toString(36).substring(2, 5)}`,
-      owner_id: data.user.id,
-      email: formData.email,
-    });
-
-    setRegistered(true);
-    setLoading(false);
   };
 
   if (registered) {

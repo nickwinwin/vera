@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/hooks/use-auth';
 import { useI18n } from '@/hooks/use-i18n';
@@ -40,8 +41,9 @@ export default function Sidebar() {
   return (
     <aside className={`bg-white border-r border-brand-border flex flex-col transition-all duration-300 ${collapsed ? 'w-20' : 'w-64'}`}>
       <div className="h-20 flex items-center px-6 border-b border-brand-border overflow-hidden">
-        <Shield className="w-8 h-8 text-brand-beige flex-shrink-0" />
-        {!collapsed && <span className="ml-3 text-2xl font-display font-bold tracking-tight">VERA</span>}
+        <div className="w-28 h-10 relative flex-shrink-0">
+          <Image src="/img/vera-logo-full.svg" alt="VERA" fill className="object-contain object-left" />
+        </div>
       </div>
 
       <nav className="flex-1 py-6 px-3 space-y-1 overflow-y-auto">

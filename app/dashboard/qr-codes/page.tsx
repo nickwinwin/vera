@@ -116,15 +116,7 @@ export default function QrCodesPage() {
           <div className="medical-card bg-white p-6">
             <h3 className="text-lg font-bold mb-4">Einstellungen</h3>
             <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-bold">Logo im QR-Code</p>
-                  <p className="text-xs text-brand-muted">Zeigt Ihr Studio-Logo in der Mitte an.</p>
-                </div>
-                <div className="w-12 h-6 bg-brand-beige rounded-full relative">
-                  <div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full" />
-                </div>
-              </div>
+              {/* Farbe anpassen ausgeblendet — nicht funktionsfähig
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-bold">Farbe anpassen</p>
@@ -132,6 +124,7 @@ export default function QrCodesPage() {
                 </div>
                 <div className="w-6 h-6 bg-brand-beige rounded border border-brand-border" />
               </div>
+              */}
               <button className="w-full btn-outline py-2 text-sm flex items-center justify-center gap-2">
                 <RefreshCw className="w-4 h-4" /> Code neu generieren
               </button>

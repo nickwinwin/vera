@@ -1,24 +1,20 @@
 import type { Metadata } from 'next';
-import { Inter, Playfair_Display, Cormorant_Garamond } from 'next/font/google';
+import { Inter_Tight, Instrument_Serif } from 'next/font/google';
 import './globals.css';
 import { I18nProvider } from '@/hooks/use-i18n';
 import { AuthProvider } from '@/hooks/use-auth';
 import { Toaster } from 'sonner';
 
-const inter = Inter({
+const inter = Inter_Tight({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
-const playfair = Playfair_Display({
+const instrument = Instrument_Serif({
   subsets: ['latin'],
+  weight: ['400'],
+  style: ['normal', 'italic'],
   variable: '--font-display',
-});
-
-const cormorant = Cormorant_Garamond({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-serif',
 });
 
 export const metadata: Metadata = {
@@ -32,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" className={`${inter.variable} ${playfair.variable} ${cormorant.variable}`}>
+    <html lang="de" suppressHydrationWarning className={`${inter.variable} ${instrument.variable}`}>
       <body suppressHydrationWarning className="bg-[#FFFFFF] text-[#1A1A1A] antialiased">
         <I18nProvider>
           <AuthProvider>

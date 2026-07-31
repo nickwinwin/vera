@@ -52,6 +52,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       } else {
         setIsLoading(false);
       }
+    }).catch(() => {
+      if (!cancelled) {
+        clearTimeout(timeoutId);
+        setIsLoading(false);
+      }
     });
 
     // Listen for auth changes
@@ -118,8 +123,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       
       setUser(profile);
       return profile;
-    } catch (error) {
-      console.error('Error fetching user profile:', error);
+    } catch (error: any) {
+      // Silent fail for unauthenticated users
+      if (error?.message?.includes('relation') || error?.code === '42P01') {
+        console.warn('[Auth] Supabase tables not ready yet.');
+      } else if (supabaseUser) {
+        console.warn('[Auth] Could not load profile for', supabaseUser.email);
+      }
       return null;
     } finally {
       setIsLoading(false);

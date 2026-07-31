@@ -11,8 +11,7 @@
   --color-brand-error: #C0392B;
 
   --font-sans: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-display), serif;
-  --font-serif: var(--font-serif), serif;
+  --font-display: var(--font-display), Georgia, serif;
 
   --radius-brand: 8px;
   

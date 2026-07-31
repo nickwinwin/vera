@@ -8,3 +8,6 @@ coverage/
 
 # Test assessment
 tests/
+
+# Internal assets & docs
+internal/

@@ -8,6 +8,7 @@ import { supabase } from '@/lib/supabase';
 import { motion } from 'motion/react';
 import html2canvas from 'html2canvas';
 import { jsPDF } from 'jspdf';
+import { QRCodeSVG } from 'qrcode.react';
 import { toast } from 'sonner';
 
 export default function ClientConsentPage() {
@@ -27,6 +28,7 @@ export default function ClientConsentPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [signatureData, setSignatureData] = useState<string | null>(null);
+  const [savedDocId, setSavedDocId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTemplateAndClinic();
@@ -89,7 +91,11 @@ export default function ClientConsentPage() {
       }
     } catch (error: any) {
       console.error('Error fetching data:', error);
-      toast.error(error.message || 'Fehler beim Laden des Formulars.');
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        toast.error('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
+      } else {
+        toast.error(error.message || 'Fehler beim Laden des Formulars.');
+      }
     } finally {
       setLoading(false);
     }
@@ -159,7 +165,7 @@ export default function ClientConsentPage() {
   };
 
   const generatePDF = async () => {
-    const element = pdfRef.current;
+    const element = document.getElementById('pdf-content');
     if (!element) return;
 
     try {
@@ -168,6 +174,7 @@ export default function ClientConsentPage() {
         scale: 2,
         useCORS: true,
         logging: false,
+        backgroundColor: '#ffffff',
       });
       const imgData = canvas.toDataURL('image/png');
       const pdf = new jsPDF('p', 'mm', 'a4');
@@ -274,9 +281,9 @@ const handleSubmit = async () => {
 
       // 3. Generate and upload PDF
       try {
-        const element = pdfRef.current;
+        const element = document.getElementById('pdf-content');
         if (element) {
-          const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false });
+          const canvas = await html2canvas(element, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' });
           const imgData = canvas.toDataURL('image/png');
           const pdf = new jsPDF('p', 'mm', 'a4');
           const imgProps = pdf.getImageProperties(imgData);
@@ -300,6 +307,7 @@ const handleSubmit = async () => {
       }
 
       setIsCompleted(true);
+      if (consentDocId) setSavedDocId(consentDocId);
       toast.success('Einwilligung erfolgreich übermittelt');
 
       // If this was the anamnese, redirect to procedure selection after a short delay
@@ -310,7 +318,11 @@ const handleSubmit = async () => {
       }
     } catch (error: any) {
       console.error('Submission error:', error);
-      toast.error('Fehler beim Speichern der Einwilligung.');
+      if (error instanceof DOMException && error.name === 'AbortError') {
+        toast.error('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
+      } else {
+        toast.error('Fehler beim Speichern der Einwilligung.');
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -336,6 +348,8 @@ const handleSubmit = async () => {
   }
 
   if (isCompleted) {
+    const qrValue = typeof window !== 'undefined' ? `${window.location.origin}/s/${slug}/consent/view/${savedDocId}` : '';
+
     return (
       <div className="min-h-screen bg-brand-warm-white flex flex-col items-center justify-center p-6 text-center">
         <motion.div 
@@ -343,7 +357,7 @@ const handleSubmit = async () => {
           animate={{ opacity: 1, scale: 1 }}
           className="max-w-md w-full medical-card bg-white p-12"
         >
-          <div className="w-20 h-20 bg-brand-success/10 rounded-full flex items-center justify-center text-brand-success mx-auto mb-6">
+          <div className="w-20 h-20 bg-[#4A9B6F]/10 rounded-full flex items-center justify-center text-[#4A9B6F] mx-auto mb-6">
             <Check className="w-10 h-10" />
           </div>
           <h1 className="text-3xl font-display font-bold mb-4">Vielen Dank!</h1>
@@ -352,20 +366,29 @@ const handleSubmit = async () => {
           </p>
           <div className="space-y-4">
             {template.category === 'anamnese' ? (
-              <p className="text-brand-secondary text-sm animate-pulse">
-                Sie werden automatisch weitergeleitet...
-              </p>
+              <div className="space-y-4">
+                {savedDocId && (
+                  <div className="bg-[#F8F6F2] border border-[#E8E2D9] rounded-[8px] p-6 flex flex-col items-center gap-3">
+                    <p className="text-xs font-bold uppercase tracking-wider text-[#555555]">Ihr Anamnesen-QR-Code</p>
+                    <QRCodeSVG value={qrValue} size={140} level="H" />
+                    <p className="text-[10px] text-[#999999]">Diesen Code beim nächsten Besuch vorzeigen</p>
+                  </div>
+                )}
+                <p className="text-brand-secondary text-sm animate-pulse">
+                  Sie werden automatisch weitergeleitet...
+                </p>
+              </div>
             ) : (
               <div className="space-y-3">
                 <button 
                   onClick={() => router.push(`/s/${slug}`)}
-                  className="btn-primary w-full py-3"
+                  className="bg-[#C9A84C] text-white px-6 py-2 rounded-[8px] hover:opacity-90 transition-all font-medium w-full py-3"
                 >
                   Zurück zum Start
                 </button>
                 <button 
                   onClick={generatePDF}
-                  className="btn-outline w-full py-3 flex items-center justify-center gap-2"
+                  className="border border-[#C9A84C] text-[#C9A84C] px-6 py-2 rounded-[8px] hover:bg-[#C9A84C] hover:text-white transition-all font-medium w-full py-3 flex items-center justify-center gap-2"
                 >
                   <Download className="w-4 h-4" /> PDF herunterladen
                 </button>
@@ -375,62 +398,59 @@ const handleSubmit = async () => {
         </motion.div>
         
         {/* Hidden element for PDF generation */}
-        <div className="hidden">
-          <div ref={pdfRef} className="p-10 bg-white text-black w-[210mm]">
-             <div className="border-b-2 border-black pb-4 mb-6 flex justify-between items-center">
-                <div>
-                  <h1 className="text-2xl font-bold uppercase">Einwilligungserklärung</h1>
-                  <p className="text-sm">VERA NiSV-Compliance System</p>
-                </div>
-                <div className="text-right text-sm">
-                  <p>Datum: {new Date().toLocaleDateString('de-DE')}</p>
-                  <p>Klinik: {clinic?.name}</p>
-                </div>
-             </div>
-             
-             <div className="space-y-6 text-sm">
-                <div className="bg-gray-100 p-4 rounded">
-                  <p className="font-bold">Behandlung: {template.name}</p>
-                  <p className="mt-1">Kunde: {formData.first_name} {formData.last_name}</p>
-                </div>
-                
-                <div className="space-y-4">
-                  {template.content.sections.map((section: any, idx: number) => (
-                    <div key={idx} className="space-y-2">
-                      <p className="font-bold border-b border-gray-200 pb-1">{section.title}</p>
-                      <div className="grid grid-cols-2 gap-x-4 gap-y-1">
-                        {section.fields.map((field: any) => {
-                          if (field.type === 'info' || field.type === 'signature') return null;
-                          const val = formData[field.id];
-                          return (
-                            <div key={field.id} className="text-xs">
-                              <span className="font-medium">{field.label}:</span> {
-                                Array.isArray(val) ? val.join(', ') : 
-                                typeof val === 'boolean' ? (val ? 'Ja' : 'Nein') : 
-                                val || 'N/A'
-                              }
-                            </div>
-                          );
-                        })}
-                      </div>
+        <div style={{ display: 'none' }}>
+          <div id="pdf-content" style={{ padding: '40px', background: '#ffffff', color: '#000000', width: '210mm' }}>
+            <div style={{ borderBottom: '2px solid #000000', paddingBottom: '16px', marginBottom: '24px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+              <div>
+                <h1 style={{ fontSize: '24px', fontWeight: 'bold', textTransform: 'uppercase' }}>Einwilligungserklärung</h1>
+                <p style={{ fontSize: '14px' }}>VERA NiSV-Compliance System</p>
+              </div>
+              <div style={{ textAlign: 'right', fontSize: '14px' }}>
+                <p>Datum: {new Date().toLocaleDateString('de-DE')}</p>
+                <p>Klinik: {clinic?.name}</p>
+              </div>
+            </div>
+            
+            <div style={{ fontSize: '14px', lineHeight: '1.5' }}>
+              <div style={{ background: '#f5f5f5', padding: '16px', borderRadius: '8px', marginBottom: '24px' }}>
+                <p style={{ fontWeight: 'bold' }}>Behandlung: {template.name}</p>
+                <p style={{ marginTop: '4px' }}>Kunde: {formData.first_name} {formData.last_name}</p>
+              </div>
+              
+              <div style={{ marginBottom: '24px' }}>
+                {template.content.sections.map((section: any, idx: number) => (
+                  <div key={idx} style={{ marginBottom: '16px' }}>
+                    <p style={{ fontWeight: 'bold', borderBottom: '1px solid #e0e0e0', paddingBottom: '4px', marginBottom: '8px' }}>{section.title}</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '4px 16px' }}>
+                      {section.fields.map((field: any) => {
+                        if (field.type === 'info' || field.type === 'signature') return null;
+                        const val = formData[field.id];
+                        return (
+                          <div key={field.id} style={{ fontSize: '12px' }}>
+                            <span style={{ fontWeight: '500' }}>{field.label}:</span>{' '}
+                            {Array.isArray(val) ? val.join(', ') : typeof val === 'boolean' ? (val ? 'Ja' : 'Nein') : val || 'N/A'}
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
-                </div>
-                
-                <div className="pt-10">
-                  <p className="font-bold mb-2">Digitale Unterschrift:</p>
-                  <div className="border border-black h-32 w-64 flex items-center justify-center">
-                    {signatureData && (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img 
-                        src={signatureData} 
-                        alt="Signature" 
-                        className="max-h-full max-w-full"
-                      />
-                    )}
                   </div>
+                ))}
+              </div>
+              
+              <div style={{ paddingTop: '40px' }}>
+                <p style={{ fontWeight: 'bold', marginBottom: '8px' }}>Digitale Unterschrift:</p>
+                <div style={{ border: '1px solid #000000', height: '128px', width: '256px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {signatureData && (
+                    <img src={signatureData} alt="Signature" style={{ maxHeight: '100%', maxWidth: '100%' }} />
+                  )}
                 </div>
-             </div>
+                {savedDocId && (
+                  <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid #e0e0e0' }}>
+                    <p style={{ fontSize: '12px', color: '#666666' }}>QR-Code-ID: {savedDocId}</p>
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -488,22 +508,33 @@ const handleSubmit = async () => {
                         
                         {field.type === 'checkbox-group' ? (
                           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-2">
-                            {field.options.map((opt: string) => (
-                              <label key={opt} className="flex items-center gap-2 cursor-pointer">
-                                <input 
-                                  type="checkbox" 
-                                  className="w-4 h-4 accent-brand-beige"
-                                  onChange={(e) => {
-                                    const current = formData[field.id] || [];
-                                    const next = e.target.checked 
-                                      ? [...current, opt] 
-                                      : current.filter((i: string) => i !== opt);
-                                    setFormData({ ...formData, [field.id]: next });
-                                  }}
-                                />
-                                <span className="text-sm">{opt}</span>
-                              </label>
-                            ))}
+                            {field.options.map((opt: string) => {
+                              const checked = (formData[field.id] || []).includes(opt);
+                              return (
+                                <label
+                                  key={opt}
+                                  className={`flex items-center gap-3 p-3 border rounded-brand cursor-pointer transition-all select-none ${
+                                    checked
+                                      ? 'border-brand-beige bg-brand-beige/5 ring-1 ring-brand-beige'
+                                      : 'border-brand-border hover:border-brand-beige hover:bg-brand-warm-white'
+                                  }`}
+                                >
+                                  <input
+                                    type="checkbox"
+                                    className="w-4 h-4 accent-brand-beige pointer-events-none"
+                                    checked={checked}
+                                    onChange={(e) => {
+                                      const current = formData[field.id] || [];
+                                      const next = e.target.checked
+                                        ? [...current, opt]
+                                        : current.filter((i: string) => i !== opt);
+                                      setFormData({ ...formData, [field.id]: next });
+                                    }}
+                                  />
+                                  <span className="text-sm font-medium">{opt}</span>
+                                </label>
+                              );
+                            })}
                           </div>
                         ) : field.type === 'boolean' ? (
                           <div className="flex gap-4 mt-1">

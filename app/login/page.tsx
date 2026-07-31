@@ -58,8 +58,12 @@ export default function LoginPage() {
     try {
       const { error } = await login(email, password);
       if (error) setError('Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.');
-    } catch {
-      setError('Ein unerwarteter Fehler ist aufgetreten.');
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setError('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
+      } else {
+        setError('Ein unerwarteter Fehler ist aufgetreten.');
+      }
     } finally {
       setLoading(false);
     }
@@ -76,33 +80,42 @@ export default function LoginPage() {
       return;
     }
 
-    const { data, error: signUpError } = await supabase.auth.signUp({
-      email: regData.email,
-      password: regData.password,
-    });
+    try {
+      const { data, error: signUpError } = await supabase.auth.signUp({
+        email: regData.email,
+        password: regData.password,
+      });
 
-    if (signUpError) {
-      setRegError(signUpError.message);
+      if (signUpError) {
+        setRegError(signUpError.message);
+        setRegLoading(false);
+        return;
+      }
+
+      if (!data.user) {
+        setRegError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+        setRegLoading(false);
+        return;
+      }
+
+      const defaultSlug = regData.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
+      await supabase.from('clinics').insert({
+        name: regData.clinicName || 'Meine Klinik',
+        slug: `${defaultSlug}-${Math.random().toString(36).substring(2, 5)}`,
+        owner_id: data.user.id,
+        email: regData.email,
+      });
+
+      setRegistered(true);
+    } catch (err) {
+      if (err instanceof DOMException && err.name === 'AbortError') {
+        setRegError('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
+      } else {
+        setRegError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
+      }
+    } finally {
       setRegLoading(false);
-      return;
     }
-
-    if (!data.user) {
-      setRegError('Registrierung fehlgeschlagen. Bitte versuchen Sie es erneut.');
-      setRegLoading(false);
-      return;
-    }
-
-    const defaultSlug = regData.email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '-');
-    await supabase.from('clinics').insert({
-      name: regData.clinicName || 'Meine Klinik',
-      slug: `${defaultSlug}-${Math.random().toString(36).substring(2, 5)}`,
-      owner_id: data.user.id,
-      email: regData.email,
-    });
-
-    setRegistered(true);
-    setRegLoading(false);
   };
 
   if (registered) {
