@@ -137,11 +137,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    return { error };
+    try {
+      const result = await Promise.race([
+        supabase.auth.signInWithPassword({ email, password }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.')), 15000)
+        ),
+      ]);
+      return { error: (result as { error: any })?.error };
+    } catch (err: any) {
+      return { error: err };
+    }
   };
 
   const logout = async () => {

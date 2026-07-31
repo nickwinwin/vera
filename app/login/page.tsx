@@ -57,7 +57,7 @@ export default function LoginPage() {
     setError('');
     try {
       const { error } = await login(email, password);
-      if (error) setError('Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Daten.');
+      if (error) setError(error.message || 'Anmeldung fehlgeschlagen.');
     } catch (err) {
       if (err instanceof DOMException && err.name === 'AbortError') {
         setError('Der Server antwortet nicht. Bitte versuchen Sie es später erneut.');
