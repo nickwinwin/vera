@@ -31,11 +31,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const initialized = useRef(false);
+  const firstMount = useRef(true);
 
   useEffect(() => {
-    if (initialized.current) return;
-    initialized.current = true;
+    if (firstMount.current) {
+      firstMount.current = false;
+      return;
+    }
     let cancelled = false;
     const TIMEOUT_MS = 15000;
 
