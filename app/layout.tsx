@@ -1,19 +1,17 @@
 import type { Metadata } from 'next';
-import { Inter_Tight, Instrument_Serif } from 'next/font/google';
+import { Inter, Playfair_Display } from 'next/font/google';
 import './globals.css';
 import { I18nProvider } from '@/hooks/use-i18n';
 import { AuthProvider } from '@/hooks/use-auth';
 import { Toaster } from 'sonner';
 
-const inter = Inter_Tight({
+const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
 });
 
-const instrument = Instrument_Serif({
+const playfair = Playfair_Display({
   subsets: ['latin'],
-  weight: ['400'],
-  style: ['normal', 'italic'],
   variable: '--font-display',
 });
 
@@ -28,7 +26,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="de" suppressHydrationWarning className={`${inter.variable} ${instrument.variable}`}>
+    <html lang="de" suppressHydrationWarning className={`${inter.variable} ${playfair.variable}`}>
       <body suppressHydrationWarning className="bg-[#FFFFFF] text-[#1A1A1A] antialiased">
         <I18nProvider>
           <AuthProvider>

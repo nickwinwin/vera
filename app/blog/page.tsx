@@ -5,17 +5,24 @@ import { blogArticles } from './content';
 export default function BlogPage() {
   return (
     <div className="min-h-screen bg-brand-warm-white">
-      <nav className="border-b border-brand-border/60 bg-white/90 backdrop-blur-lg sticky top-0 z-40">
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-brand-beige rounded-xl flex items-center justify-center">
-              <Shield className="w-5 h-5 text-white" />
+      <nav className="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-brand-border/30">
+        <div className="max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
+          <div className="flex justify-between h-20 items-center">
+            <Link href="/" className="flex items-center gap-3 group">
+              <div className="w-28 h-10 relative">
+                <svg className="w-full h-full text-brand-beige" viewBox="0 0 28 10" fill="none"><text x="0" y="9" fontSize="10" fontWeight="bold" fill="currentColor">VERA</text></svg>
+              </div>
+            </Link>
+            <div className="hidden md:flex items-center gap-10">
+              <Link href="/#features" className="text-sm text-brand-secondary hover:text-brand-dark transition-colors tracking-wide">Features</Link>
+              <Link href="/#pricing" className="text-sm text-brand-secondary hover:text-brand-dark transition-colors tracking-wide">Preise</Link>
+              <Link href="/faq" className="text-sm text-brand-secondary hover:text-brand-dark transition-colors tracking-wide">FAQ</Link>
+              <Link href="/blog" className="text-sm text-brand-secondary hover:text-brand-dark transition-colors tracking-wide">Blog</Link>
+              <div className="flex items-center gap-6">
+                <Link href="/login" className="text-sm text-brand-secondary hover:text-brand-dark transition-colors tracking-wide">Login</Link>
+                <Link href="/register" className="btn-primary shadow-sm shadow-brand-beige/20">Starten</Link>
+              </div>
             </div>
-            <span className="text-xl font-display font-bold">VERA</span>
-          </Link>
-          <div className="flex items-center gap-6">
-            <Link href="/faq" className="text-sm text-brand-secondary hover:text-brand-dark">FAQ</Link>
-            <Link href="/register" className="btn-primary text-sm">Starten</Link>
           </div>
         </div>
       </nav>
